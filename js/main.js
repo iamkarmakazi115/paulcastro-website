@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // EVERYTHING BELOW THIS POINT IS ADDITIONAL FUNCTIONALITY
 // API Configuration
-const API_URL = 'https://api.karmakazi.org/api';
+const API_URL = 'https://api.karmakazi.org';
 let authToken = localStorage.getItem('authToken');
 let currentUser = null;
 
