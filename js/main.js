@@ -378,7 +378,7 @@ function checkChatAccess() {
     }
 }
 
-// FIXED: Load chat interface
+// FIXED: Load chat interface with chat.js loading wait
 function loadChatInterface() {
     console.log('Loading chat interface...');
     const chatLogin = document.getElementById('chatLogin');
@@ -388,8 +388,57 @@ function loadChatInterface() {
     if (chatInterface) {
         chatInterface.style.display = 'block';
         
-        // Initialize chat if function exists
-        if (typeof initializeChat === 'function') {
+        // Wait for chat.js to load
+        if (typeof initializeChat === 'undefined') {
+            console.log('Waiting for chat.js to load...');
+            chatInterface.innerHTML = `
+                <div style="padding: 2rem; text-align: center; color: #fff;">
+                    <h3>Loading Chat...</h3>
+                    <p>Welcome, ${window.currentUser ? window.currentUser.username : 'User'}!</p>
+                    <p>Initializing chat components...</p>
+                    <div style="margin: 20px 0;">⏳</div>
+                </div>
+            `;
+            
+            const checkForChat = setInterval(() => {
+                if (typeof initializeChat === 'function') {
+                    console.log('chat.js now loaded');
+                    clearInterval(checkForChat);
+                    // Now call initializeChat
+                    try {
+                        initializeChat();
+                    } catch (error) {
+                        console.error('Error initializing chat:', error);
+                        chatInterface.innerHTML = `
+                            <div style="padding: 2rem; text-align: center; color: #fff;">
+                                <h3>Chat Initialization Error</h3>
+                                <p>There was an error loading the chat interface.</p>
+                                <p>Error: ${error.message}</p>
+                                <button onclick="window.logout()">Logout and Retry</button>
+                            </div>
+                        `;
+                    }
+                }
+            }, 50);
+            
+            // Timeout after 10 seconds
+            setTimeout(() => {
+                if (typeof initializeChat === 'undefined') {
+                    console.error('Timeout waiting for chat.js to load');
+                    clearInterval(checkForChat);
+                    chatInterface.innerHTML = `
+                        <div style="padding: 2rem; text-align: center; color: #fff;">
+                            <h3>Chat Loading Timeout</h3>
+                            <p>Chat components failed to load within 10 seconds.</p>
+                            <p>Please refresh the page and try again.</p>
+                            <button onclick="location.reload()">Refresh Page</button>
+                            <button onclick="window.logout()">Logout</button>
+                        </div>
+                    `;
+                }
+            }, 10000);
+        } else {
+            // Initialize chat if function exists
             console.log('Initializing chat...');
             try {
                 initializeChat();
@@ -404,18 +453,6 @@ function loadChatInterface() {
                     </div>
                 `;
             }
-        } else {
-            console.log('initializeChat function not found, showing fallback');
-            // Fallback: show a basic interface
-            chatInterface.innerHTML = `
-                <div style="padding: 2rem; text-align: center; color: #fff;">
-                    <h3>Chat Interface Loading...</h3>
-                    <p>Welcome, ${window.currentUser ? window.currentUser.username : 'User'}!</p>
-                    <p>Chat functionality is being initialized.</p>
-                    <p><small>If this message persists, please refresh the page.</small></p>
-                    <button onclick="window.logout()">Logout</button>
-                </div>
-            `;
         }
     } else {
         console.error('Chat interface element not found');
