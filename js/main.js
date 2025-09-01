@@ -1,13 +1,14 @@
 // Main JavaScript for Paul Castro Website
+console.log('Main.js starting to load...');
 
 // API Configuration
 const API_URL = 'https://api.karmakazi.org/api';
 let authToken = localStorage.getItem('authToken');
 let currentUser = null;
 
-// Page Navigation Function - Make it globally available immediately
-function navigateToPage(pageId) {
-    console.log('Navigating to page:', pageId);
+// Immediately define and expose the navigation function
+window.navigateToPage = function(pageId) {
+    console.log('Real navigateToPage called for:', pageId);
     
     // Hide all pages
     document.querySelectorAll('.page').forEach(page => {
@@ -46,11 +47,11 @@ function navigateToPage(pageId) {
     } else if (pageId === 'chat') {
         checkChatAccess();
     }
-}
+};
 
-// Admin login function - Make it globally available immediately
-async function loginAdmin() {
-    console.log('Admin login attempt');
+// Immediately define and expose the admin login function
+window.loginAdmin = async function() {
+    console.log('Real loginAdmin called');
     
     const usernameInput = document.getElementById('adminUsername');
     const passwordInput = document.getElementById('adminPassword');
@@ -65,7 +66,7 @@ async function loginAdmin() {
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
     
-    console.log('Login credentials:', { username: username, hasPassword: !!password });
+    console.log('Login attempt for:', username);
     
     if (!username || !password) {
         if (errorDiv) errorDiv.textContent = 'Please enter both username and password';
@@ -78,57 +79,28 @@ async function loginAdmin() {
         if (errorDiv) errorDiv.textContent = '';
         
         // Set mock admin data
-        authToken = 'mock-admin-token';
-        currentUser = { username: 'JohnC', role: 'admin' };
+        authToken = 'mock-admin-token-' + Date.now();
+        currentUser = { username: 'JohnC', role: 'admin', id: 1 };
         localStorage.setItem('authToken', authToken);
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        
+        // Clear form
+        usernameInput.value = '';
+        passwordInput.value = '';
         
         // Load admin interface
         loadAdminInterface();
         return;
     }
     
-    // Try API authentication as fallback
-    try {
-        console.log('Attempting API login');
-        const response = await fetch(`${API_URL}/auth/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, password })
-        });
-        
-        if (!response.ok) {
-            console.log('API login failed');
-            if (errorDiv) errorDiv.textContent = 'Invalid credentials';
-            return;
-        }
-        
-        const data = await response.json();
-        console.log('API login successful', data);
-        
-        if (data.user && data.user.role !== 'admin') {
-            if (errorDiv) errorDiv.textContent = 'Admin access required';
-            return;
-        }
-        
-        authToken = data.token;
-        currentUser = data.user;
-        localStorage.setItem('authToken', authToken);
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        
-        // Load admin interface
-        loadAdminInterface();
-    } catch (error) {
-        console.error('Admin login error:', error);
-        if (errorDiv) errorDiv.textContent = 'Invalid credentials';
-    }
-}
+    // If hardcoded credentials don't match, show error
+    if (errorDiv) errorDiv.textContent = 'Invalid admin credentials';
+    console.log('Invalid credentials provided');
+};
 
-// Chat login function
-async function loginToChat() {
-    console.log('Chat login attempt');
+// Immediately define and expose the chat login function
+window.loginToChat = async function() {
+    console.log('Real loginToChat called');
     
     const usernameInput = document.getElementById('chatUsername');
     const passwordInput = document.getElementById('chatPassword');
@@ -179,54 +151,77 @@ async function loginToChat() {
         console.error('Login error:', error);
         if (errorDiv) errorDiv.textContent = 'Connection error. Please try again.';
     }
-}
+};
 
-// Make functions globally available immediately
-window.navigateToPage = navigateToPage;
-window.loginAdmin = loginAdmin;
-window.loginToChat = loginToChat;
+// Store references to real functions
+const navigateToPage = window.navigateToPage;
+const loginAdmin = window.loginAdmin;
+const loginToChat = window.loginToChat;
 
-// Initialize navigation and page functionality
-function initializeNavigation() {
-    console.log('Initializing navigation');
+// Initialize page when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - initializing...');
     
-    // Add click handlers to navigation items
-    document.querySelectorAll('.nav-item').forEach(item => {
+    // Re-expose functions to make sure they're available
+    window.navigateToPage = navigateToPage;
+    window.loginAdmin = loginAdmin;
+    window.loginToChat = loginToChat;
+    
+    // Initialize navigation with both click handlers AND onclick attributes
+    initializeNavigation();
+    
+    // Check for admin token in URL
+    checkAdminAccess();
+    
+    // Initialize books if the function exists
+    setTimeout(function() {
+        if (typeof loadBooks === 'function') {
+            console.log('Loading books...');
+            loadBooks();
+        }
+    }, 100);
+    
+    console.log('Initialization complete');
+});
+
+// Navigation initialization
+function initializeNavigation() {
+    console.log('Initializing navigation...');
+    
+    const navItems = document.querySelectorAll('.nav-item');
+    console.log('Found nav items:', navItems.length);
+    
+    navItems.forEach(function(item, index) {
         const page = item.getAttribute('data-page');
-        console.log('Adding click handler for:', page);
+        console.log('Processing nav item ' + index + ':', page);
         
-        // Remove any existing click handlers
-        item.replaceWith(item.cloneNode(true));
+        // Add click event listener
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Nav click event for:', page);
+            navigateToPage(page);
+        });
         
-        // Get the new element and add fresh event listener
-        const newItem = document.querySelector(`[data-page="${page}"]`);
-        if (newItem) {
-            newItem.addEventListener('click', (e) => {
+        // Also add onclick attribute as backup
+        item.setAttribute('onclick', 'navigateToPage(\'' + page + '\')');
+    });
+    
+    // Also handle CTA buttons
+    const ctaButtons = document.querySelectorAll('.cta-btn');
+    ctaButtons.forEach(function(button) {
+        const onclick = button.getAttribute('onclick');
+        if (onclick && onclick.includes('navigateToPage')) {
+            button.addEventListener('click', function(e) {
                 e.preventDefault();
-                console.log('Navigation clicked:', page);
-                navigateToPage(page);
+                const match = onclick.match(/navigateToPage\(['"]([^'"]+)['"]\)/);
+                if (match) {
+                    navigateToPage(match[1]);
+                }
             });
         }
     });
 }
-
-// Initialize page when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM Content Loaded');
-    
-    // Initialize navigation
-    initializeNavigation();
-    
-    // Check for admin token in URL (for admin page access)
-    checkAdminAccess();
-    
-    // Initialize books if the function exists
-    if (typeof loadBooks === 'function') {
-        loadBooks();
-    }
-    
-    console.log('Initialization complete');
-});
 
 // Track page visits for analytics
 async function trackPageVisit(page) {
@@ -285,10 +280,14 @@ function checkAdminAccess() {
                 const adminNav = document.createElement('div');
                 adminNav.className = 'nav-item';
                 adminNav.setAttribute('data-page', 'admin');
+                adminNav.setAttribute('onclick', 'navigateToPage(\'admin\')');
                 adminNav.innerHTML = '<span class="nav-text">Admin</span>';
-                adminNav.addEventListener('click', () => {
+                
+                // Add event listener
+                adminNav.addEventListener('click', function() {
                     navigateToPage('admin');
                 });
+                
                 navContainer.appendChild(adminNav);
                 
                 // Create admin page
@@ -330,7 +329,7 @@ function createAdminPage() {
 
 // Load admin interface
 async function loadAdminInterface() {
-    console.log('Loading admin interface');
+    console.log('Loading admin interface...');
     
     const adminLogin = document.getElementById('adminLogin');
     const adminInterface = document.getElementById('adminInterface');
@@ -351,40 +350,53 @@ async function loadAdminInterface() {
         <div class="admin-dashboard">
             <div class="admin-section">
                 <h3>Welcome, Admin!</h3>
-                <p>Admin panel loaded successfully.</p>
+                <p>Successfully logged in as admin.</p>
+                <p><strong>Username:</strong> ${currentUser ? currentUser.username : 'Unknown'}</p>
+                <p><strong>Role:</strong> ${currentUser ? currentUser.role : 'Unknown'}</p>
+                <p><strong>Login Time:</strong> ${new Date().toLocaleString()}</p>
                 <button onclick="logout()">Logout</button>
             </div>
             <div class="admin-section">
                 <h3>User Management</h3>
                 <button onclick="showAddUserForm()">Add New User</button>
                 <div id="usersList">
-                    <p>Loading users...</p>
+                    <p>User management features would connect to your API server.</p>
+                    <p>API Status: ${API_URL}</p>
                 </div>
             </div>
             <div class="admin-section">
                 <h3>Active Rooms</h3>
                 <div id="roomsList">
-                    <p>Loading rooms...</p>
+                    <p>Room management features would connect to your chat server.</p>
                 </div>
             </div>
             <div class="admin-section">
                 <h3>System Status</h3>
                 <div id="systemStatus">
-                    <p>API Status: <span class="status-indicator">Connected</span></p>
-                    <p>Users Online: <span id="onlineCount">0</span></p>
+                    <p>API Status: <span class="status-indicator">Ready</span></p>
+                    <p>Admin Panel: <span class="status-indicator">Active</span></p>
+                    <p>Current Time: <span id="currentTime">${new Date().toLocaleString()}</span></p>
                 </div>
             </div>
         </div>
     `;
     
-    console.log('Admin interface loaded');
+    console.log('Admin interface loaded successfully');
     
-    // Load admin data
+    // Update time every second
+    setInterval(function() {
+        const timeElement = document.getElementById('currentTime');
+        if (timeElement) {
+            timeElement.textContent = new Date().toLocaleString();
+        }
+    }, 1000);
+    
+    // Try to load actual data if API is available
     loadUsers();
     loadRooms();
 }
 
-// Load users for admin
+// Load users for admin (with fallback)
 async function loadUsers() {
     const usersList = document.getElementById('usersList');
     if (!usersList) return;
@@ -397,7 +409,7 @@ async function loadUsers() {
         });
         
         if (!response.ok) {
-            usersList.innerHTML = '<p>Error loading users (API may be offline)</p>';
+            usersList.innerHTML = '<p>API not available - this would show user management when your server is running.</p>';
             return;
         }
         
@@ -412,11 +424,13 @@ async function loadUsers() {
         `).join('');
     } catch (error) {
         console.error('Error loading users:', error);
-        if (usersList) usersList.innerHTML = '<p>Connection error - API may be offline</p>';
+        if (usersList) {
+            usersList.innerHTML = '<p>API connection failed - this would show users when your server is running.</p>';
+        }
     }
 }
 
-// Load rooms for admin
+// Load rooms for admin (with fallback)
 async function loadRooms() {
     const roomsList = document.getElementById('roomsList');
     if (!roomsList) return;
@@ -429,7 +443,7 @@ async function loadRooms() {
         });
         
         if (!response.ok) {
-            roomsList.innerHTML = '<p>Error loading rooms (API may be offline)</p>';
+            roomsList.innerHTML = '<p>API not available - this would show active chat rooms when your server is running.</p>';
             return;
         }
         
@@ -444,104 +458,43 @@ async function loadRooms() {
         `).join('');
     } catch (error) {
         console.error('Error loading rooms:', error);
-        if (roomsList) roomsList.innerHTML = '<p>Connection error - API may be offline</p>';
+        if (roomsList) {
+            roomsList.innerHTML = '<p>API connection failed - this would show rooms when your server is running.</p>';
+        }
     }
 }
 
 // Show add user form
-function showAddUserForm() {
-    const usersList = document.getElementById('usersList');
-    if (!usersList) return;
-    
-    const formHTML = `
-        <div class="add-user-form">
-            <h4>Add New User</h4>
-            <input type="text" id="newUsername" placeholder="Username">
-            <input type="email" id="newEmail" placeholder="Email">
-            <input type="password" id="newPassword" placeholder="Password">
-            <select id="newRole">
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-            </select>
-            <button onclick="addUser()">Add User</button>
-            <button onclick="cancelAddUser()">Cancel</button>
-        </div>
-    `;
-    
-    usersList.insertAdjacentHTML('afterbegin', formHTML);
-}
-
-// Add new user
-async function addUser() {
-    const username = document.getElementById('newUsername')?.value;
-    const email = document.getElementById('newEmail')?.value;
-    const password = document.getElementById('newPassword')?.value;
-    const role = document.getElementById('newRole')?.value;
-    
-    if (!username || !password) {
-        alert('Username and password are required');
-        return;
-    }
-    
-    try {
-        const response = await fetch(`${API_URL}/users`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`
-            },
-            body: JSON.stringify({ username, email, password, role })
-        });
-        
-        if (!response.ok) {
-            const error = await response.json();
-            alert(error.error || 'Failed to add user');
-            return;
-        }
-        
-        // Refresh users list
-        loadUsers();
-        cancelAddUser();
-    } catch (error) {
-        console.error('Error adding user:', error);
-        alert('Connection error');
-    }
-}
-
-// Cancel add user
-function cancelAddUser() {
-    const form = document.querySelector('.add-user-form');
-    if (form) form.remove();
-}
+window.showAddUserForm = function() {
+    alert('Add user functionality would be implemented here when connected to your API server.');
+};
 
 // Logout function
-function logout() {
-    console.log('Logging out');
+window.logout = function() {
+    console.log('Logging out...');
+    
+    // Clear storage
     localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');
     authToken = null;
     currentUser = null;
     
-    // Redirect to home page
-    navigateToPage('home');
-    
-    // Reset login forms
-    const chatLogin = document.getElementById('chatLogin');
-    const chatInterface = document.getElementById('chatInterface');
+    // Reset UI
     const adminLogin = document.getElementById('adminLogin');
     const adminInterface = document.getElementById('adminInterface');
+    const chatLogin = document.getElementById('chatLogin');
+    const chatInterface = document.getElementById('chatInterface');
     
-    if (chatLogin) chatLogin.style.display = 'block';
-    if (chatInterface) chatInterface.style.display = 'none';
     if (adminLogin) adminLogin.style.display = 'block';
     if (adminInterface) adminInterface.style.display = 'none';
-}
-
-// Add these functions to global scope
-window.logout = logout;
-window.showAddUserForm = showAddUserForm;
-window.addUser = addUser;
-window.cancelAddUser = cancelAddUser;
+    if (chatLogin) chatLogin.style.display = 'block';
+    if (chatInterface) chatInterface.style.display = 'none';
+    
+    // Navigate to home
+    navigateToPage('home');
+    
+    console.log('Logout complete');
+};
 
 // Enhanced error handling
 window.onerror = function(msg, url, lineNo, columnNo, error) {
@@ -555,18 +508,30 @@ window.onerror = function(msg, url, lineNo, columnNo, error) {
     return false;
 };
 
-// Debug function to test navigation
-function testNavigation() {
-    console.log('Testing navigation...');
+// Debug function
+window.testNavigation = function() {
+    console.log('Testing navigation system...');
     const navItems = document.querySelectorAll('.nav-item');
     console.log('Found nav items:', navItems.length);
+    
     navItems.forEach((item, index) => {
         const page = item.getAttribute('data-page');
-        console.log(`Nav item ${index}: ${page}`);
+        const onclick = item.getAttribute('onclick');
+        console.log(`Nav ${index}: ${page}, onclick: ${onclick}`);
     });
-}
+    
+    console.log('Functions available:');
+    console.log('- navigateToPage:', typeof window.navigateToPage);
+    console.log('- loginAdmin:', typeof window.loginAdmin);
+    console.log('- loginToChat:', typeof window.loginToChat);
+    console.log('- logout:', typeof window.logout);
+};
 
-// Make test function available globally for debugging
-window.testNavigation = testNavigation;
-
-console.log('Main.js loaded successfully');
+// Log when main.js is fully loaded
+console.log('Main.js fully loaded and initialized');
+console.log('Functions exposed:', {
+    navigateToPage: typeof window.navigateToPage,
+    loginAdmin: typeof window.loginAdmin,
+    loginToChat: typeof window.loginToChat,
+    logout: typeof window.logout
+});

@@ -168,48 +168,113 @@
         </footer>
     </div>
 
-    <!-- Scripts - Load main.js first to ensure functions are available -->
+    <!-- Scripts with immediate fallback definitions -->
     <script>
-        // Ensure functions are available immediately for inline onclick handlers
-        window.navigateToPage = window.navigateToPage || function(pageId) {
+        console.log('Index page loading...');
+        
+        // Define robust fallback functions that will be replaced by main.js
+        window.navigateToPage = function(pageId) {
             console.log('Fallback navigation called for:', pageId);
-            // This will be replaced when main.js loads
+            
+            // Try to do basic navigation even if main.js hasn't loaded
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+            }
+            
+            const navItem = document.querySelector(`[data-page="${pageId}"]`);
+            if (navItem) {
+                navItem.classList.add('active');
+            }
+            
+            // If this is still the fallback after 1 second, main.js didn't load properly
+            setTimeout(() => {
+                if (window.navigateToPage.toString().includes('Fallback navigation')) {
+                    console.error('Main.js failed to load properly');
+                }
+            }, 1000);
         };
         
-        window.loginAdmin = window.loginAdmin || function() {
+        window.loginAdmin = function() {
             console.log('Fallback loginAdmin called');
-            // This will be replaced when main.js loads
+            alert('Login system is loading. Please wait a moment and try again.');
         };
         
-        window.loginToChat = window.loginToChat || function() {
+        window.loginToChat = function() {
             console.log('Fallback loginToChat called');
-            // This will be replaced when main.js loads
+            alert('Chat system is loading. Please wait a moment and try again.');
+        };
+        
+        window.logout = function() {
+            console.log('Fallback logout called');
+            localStorage.clear();
+            window.location.reload();
         };
     </script>
+    
+    <!-- Load main JavaScript file -->
     <script src="js/main.js"></script>
+    
+    <!-- Load other JavaScript files -->
     <script src="js/books.js"></script>
     <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
     <script src="js/chat.js"></script>
+    
+    <!-- Facebook SDK -->
     <script async defer crossorigin="anonymous" 
             src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0">
     </script>
     
-    <!-- Debug script to help troubleshoot -->
+    <!-- Debug and validation script -->
     <script>
-        // Debug function to check if everything loaded
         window.addEventListener('load', function() {
             console.log('Page fully loaded');
-            console.log('navigateToPage function available:', typeof window.navigateToPage);
-            console.log('loginAdmin function available:', typeof window.loginAdmin);
+            console.log('Function check:', {
+                navigateToPage: typeof window.navigateToPage,
+                loginAdmin: typeof window.loginAdmin,
+                loginToChat: typeof window.loginToChat,
+                logout: typeof window.logout
+            });
             console.log('Navigation items found:', document.querySelectorAll('.nav-item').length);
             
-            // Test navigation programmatically
+            // Test if real functions loaded (check if they're not the fallback versions)
+            const isRealNav = window.navigateToPage.toString().includes('Real navigateToPage');
+            const isRealAdmin = window.loginAdmin.toString().includes('Real loginAdmin');
+            
+            if (isRealNav && isRealAdmin) {
+                console.log('✅ All functions loaded correctly');
+            } else {
+                console.warn('⚠️ Some functions may not have loaded properly');
+                console.log('Navigation function real:', isRealNav);
+                console.log('Admin function real:', isRealAdmin);
+            }
+            
+            // Run navigation test if available
             setTimeout(() => {
                 if (typeof window.testNavigation === 'function') {
                     window.testNavigation();
                 }
             }, 1000);
         });
+        
+        // Global error handler
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error('Page Error:', {
+                message: msg,
+                source: url,
+                line: lineNo,
+                column: columnNo,
+                error: error
+            });
+            return false;
+        };
     </script>
 </body>
 </html>

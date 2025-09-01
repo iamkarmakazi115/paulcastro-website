@@ -16,15 +16,27 @@
             <section class="page active">
                 <div class="page-header">
                     <h2 class="page-title">Admin Panel</h2>
+                    <p style="text-align: center; color: rgba(224, 224, 224, 0.7); margin-top: 1rem;">
+                        Secure administrative access for Paul Castro's website
+                    </p>
                 </div>
                 <div class="admin-content">
                     <div class="admin-login" id="adminLogin">
                         <div class="login-form">
                             <h3>Admin Authentication</h3>
+                            <p>Please enter your administrative credentials</p>
                             <input type="text" id="adminUsername" placeholder="Admin Username" autocomplete="username">
                             <input type="password" id="adminPassword" placeholder="Admin Password" autocomplete="current-password">
-                            <button class="login-btn" onclick="loginAdmin()">Login as Admin</button>
+                            <button class="login-btn" onclick="loginAdmin()" id="loginButton">Login as Admin</button>
                             <div class="error-message" id="adminLoginError"></div>
+                            
+                            <!-- Debug info (remove in production) -->
+                            <div style="margin-top: 2rem; padding: 1rem; background: rgba(51, 51, 51, 0.3); border-radius: 8px; font-size: 0.9rem; color: rgba(224, 224, 224, 0.6);">
+                                <strong>Debug Info:</strong><br>
+                                Expected Username: JohnC<br>
+                                Expected Password: Gantz115!<br>
+                                <button onclick="fillCredentials()" style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(220, 20, 60, 0.3); border: 1px solid rgba(220, 20, 60, 0.5); color: white; border-radius: 4px; cursor: pointer;">Auto-fill Credentials</button>
+                            </div>
                         </div>
                     </div>
                     <div class="admin-interface" id="adminInterface" style="display: none;">
@@ -33,8 +45,111 @@
                 </div>
             </section>
         </main>
+        
+        <!-- Back to main site link -->
+        <div style="position: fixed; top: 20px; left: 20px; z-index: 2000;">
+            <a href="index.html" style="color: var(--accent); text-decoration: none; padding: 0.5rem 1rem; background: rgba(26, 26, 26, 0.8); border: 1px solid rgba(220, 20, 60, 0.3); border-radius: 8px; transition: all 0.3s ease;">
+                ← Back to Main Site
+            </a>
+        </div>
     </div>
+
+    <!-- Scripts with fallback function definitions -->
+    <script>
+        console.log('Admin page loading...');
+        
+        // Define fallback functions immediately
+        window.loginAdmin = window.loginAdmin || function() {
+            console.log('Fallback loginAdmin called - waiting for main.js to load');
+            // Set a flag to retry after main.js loads
+            window.adminLoginPending = true;
+        };
+        
+        window.fillCredentials = function() {
+            document.getElementById('adminUsername').value = 'JohnC';
+            document.getElementById('adminPassword').value = 'Gantz115!';
+        };
+        
+        // Function to check if main.js loaded properly
+        function checkMainJsLoaded() {
+            console.log('Checking if main.js loaded...');
+            console.log('loginAdmin type:', typeof window.loginAdmin);
+            
+            if (typeof window.loginAdmin === 'function' && window.loginAdmin.toString().includes('Real loginAdmin')) {
+                console.log('Main.js loaded successfully');
+                
+                // If there was a pending login attempt, retry it
+                if (window.adminLoginPending) {
+                    console.log('Retrying pending login...');
+                    window.adminLoginPending = false;
+                    window.loginAdmin();
+                }
+            } else {
+                console.log('Main.js not fully loaded yet, will retry...');
+                setTimeout(checkMainJsLoaded, 100);
+            }
+        }
+        
+        // Add enter key support for password field
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordField = document.getElementById('adminPassword');
+            const usernameField = document.getElementById('adminUsername');
+            
+            function handleEnterKey(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    window.loginAdmin();
+                }
+            }
+            
+            if (passwordField) passwordField.addEventListener('keypress', handleEnterKey);
+            if (usernameField) usernameField.addEventListener('keypress', handleEnterKey);
+            
+            // Check if main.js loaded
+            setTimeout(checkMainJsLoaded, 100);
+        });
+    </script>
+    
+    <!-- Load main JavaScript -->
     <script src="js/main.js"></script>
-    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    
+    <!-- Debug script -->
+    <script>
+        window.addEventListener('load', function() {
+            console.log('Admin page fully loaded');
+            console.log('loginAdmin function available:', typeof window.loginAdmin);
+            console.log('Functions check:', {
+                loginAdmin: typeof window.loginAdmin,
+                navigateToPage: typeof window.navigateToPage,
+                logout: typeof window.logout
+            });
+            
+            // Test login function
+            setTimeout(function() {
+                if (typeof window.testNavigation === 'function') {
+                    console.log('Running navigation test...');
+                    window.testNavigation();
+                }
+            }, 500);
+        });
+        
+        // Error handler for debugging
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error('Admin page error:', {
+                message: msg,
+                source: url,
+                line: lineNo,
+                column: columnNo,
+                error: error
+            });
+            
+            const errorDiv = document.getElementById('adminLoginError');
+            if (errorDiv && msg.includes('loginAdmin')) {
+                errorDiv.innerHTML = 'Login function error. Please refresh the page and try again.';
+            }
+            
+            return false;
+        };
+    </script>
 </body>
 </html>
