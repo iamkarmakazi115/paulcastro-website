@@ -33,9 +33,17 @@ const booksData = [
     }
 ];
 
+// Make loadBooks function available globally
 function loadBooks() {
+    console.log('loadBooks function called');
     const worksGrid = document.querySelector('.works-grid');
-    if (!worksGrid) return;
+    
+    if (!worksGrid) {
+        console.error('Works grid element not found');
+        return;
+    }
+    
+    console.log('Found works grid, loading', booksData.length, 'books');
     
     worksGrid.innerHTML = booksData.map(book => `
         <div class="book-card">
@@ -45,16 +53,24 @@ function loadBooks() {
         </div>
     `).join('');
     
+    console.log('Books HTML inserted, adding animations');
+    
     // Add animation to cards as they appear
     const cards = document.querySelectorAll('.book-card');
     cards.forEach((card, index) => {
         setTimeout(() => {
             card.style.animation = 'fadeInUp 0.5s ease forwards';
+            card.style.opacity = '1';
         }, index * 100);
     });
+    
+    console.log('Book loading complete, found', cards.length, 'book cards');
 }
 
-// Add fadeInUp animation style
+// Ensure the function is available globally
+window.loadBooks = loadBooks;
+
+// Add CSS animation styles
 const style = document.createElement('style');
 style.textContent = `
     @keyframes fadeInUp {
@@ -67,5 +83,24 @@ style.textContent = `
             transform: translateY(0);
         }
     }
+    
+    .book-card {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
 `;
 document.head.appendChild(style);
+
+// Auto-load books if we're on the works page
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Books.js DOM loaded, checking for works page');
+    
+    // Check if we're on works page and it's active
+    const worksPage = document.getElementById('works');
+    if (worksPage && worksPage.classList.contains('active')) {
+        console.log('Works page is active, loading books immediately');
+        loadBooks();
+    }
+});
+
+console.log('Books.js loaded successfully');

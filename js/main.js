@@ -41,9 +41,19 @@ window.navigateToPage = function(pageId) {
     
     // Special handling for certain pages
     if (pageId === 'works') {
-        if (typeof loadBooks === 'function') {
-            loadBooks();
-        }
+        console.log('Works page selected, calling loadBooks');
+        // Try multiple ways to ensure books load
+        setTimeout(() => {
+            if (typeof window.loadBooks === 'function') {
+                console.log('Calling window.loadBooks');
+                window.loadBooks();
+            } else if (typeof loadBooks === 'function') {
+                console.log('Calling loadBooks directly');
+                loadBooks();
+            } else {
+                console.error('loadBooks function not found');
+            }
+        }, 100);
     } else if (pageId === 'chat') {
         checkChatAccess();
     }
@@ -173,16 +183,98 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check for admin token in URL
     checkAdminAccess();
     
-    // Initialize books if the function exists
+    // Initialize books - try multiple approaches
     setTimeout(function() {
-        if (typeof loadBooks === 'function') {
-            console.log('Loading books...');
-            loadBooks();
+        console.log('Attempting to load books...');
+        
+        // Check if we're on the works page and it's visible
+        const worksPage = document.getElementById('works');
+        if (worksPage && worksPage.classList.contains('active')) {
+            console.log('Works page is active, loading books');
+            tryLoadBooks();
         }
-    }, 100);
+        
+        // Also load books by default since it's the showcase
+        tryLoadBooks();
+    }, 200);
     
     console.log('Initialization complete');
 });
+
+// Function to try loading books with multiple fallbacks
+function tryLoadBooks() {
+    console.log('tryLoadBooks called');
+    
+    if (typeof window.loadBooks === 'function') {
+        console.log('Found window.loadBooks, calling it');
+        window.loadBooks();
+    } else if (typeof loadBooks === 'function') {
+        console.log('Found loadBooks, calling it');
+        loadBooks();
+    } else {
+        console.log('loadBooks not found, will try again in 500ms');
+        setTimeout(() => {
+            if (typeof window.loadBooks === 'function') {
+                console.log('Retry: calling window.loadBooks');
+                window.loadBooks();
+            } else {
+                console.error('loadBooks function still not available after retry');
+                // Manual fallback - load books inline
+                loadBooksManually();
+            }
+        }, 500);
+    }
+}
+
+// Manual fallback to load books if books.js fails
+function loadBooksManually() {
+    console.log('Loading books manually as fallback');
+    const worksGrid = document.querySelector('.works-grid');
+    if (!worksGrid) return;
+    
+    const fallbackBooks = [
+        {
+            title: "Blood Howls",
+            subtitle: "When ancient blood awakens, the hunt begins.",
+            description: "Kael Thorne's twenty-fifth birthday was supposed to be ordinary—dinner with family, maybe a call from his sister. Instead, it becomes the night his parents die and a supernatural assassin called the Hunter comes to claim what flows in his veins."
+        },
+        {
+            title: "Forgotten Son",
+            subtitle: "When the dead whisper warnings, a god's son must choose between love and cosmic order.",
+            description: "Christos Thanatos has spent twenty-six years hiding in plain sight—working security jobs and pretending the voices of the dead are just background noise. The son of Hades should be ruling the underworld, but he's chosen the mortal world instead."
+        },
+        {
+            title: "Out of Time",
+            subtitle: "When a prince is murdered and hung like a scarecrow, the killer leaves behind more than a corpse.",
+            description: "Cael Ward Corbin has spent years hiding what he is: a memory-binder caught between the Seelie and Unseelie Courts. When Prince Alarion is found crucified with the forbidden sigil of the Outriders, Cael's investigation unearths a conspiracy."
+        },
+        {
+            title: "Which Way the Wind Blows",
+            subtitle: "In the shadows between light and darkness, a bastard prince must choose his crown.",
+            description: "When Veraden—son of the ruthless Queen Mab—rescues Lord Calendreth from an Unseelie dungeon, he triggers a war that will shatter the ancient balance between the courts."
+        },
+        {
+            title: "The Descent - Book 1",
+            subtitle: "Born from fire and hidden in shadow, Lucien Graves never knew he was heir to a throne built on blood.",
+            description: "Bartending in the vampire-owned clubs of Kharvas, Lucien lives quietly until ancient relics begin awakening in his presence. When he discovers his true identity as the son of murdered vampire royalty, he's thrust into a war."
+        },
+        {
+            title: "The Descent: Ash Reborn - Book 2",
+            subtitle: "The fire within him was never meant to be carried by the living.",
+            description: "Lucien Thorne awakens to a terrible truth—he died, and the Sixth Relic brought him back. Now he must confront the Council's final weapons while discovering that he is no longer merely a relic-bearer, but a living artifact himself."
+        }
+    ];
+    
+    worksGrid.innerHTML = fallbackBooks.map(book => `
+        <div class="book-card">
+            <h3 class="book-title">${book.title}</h3>
+            <p class="book-subtitle">${book.subtitle}</p>
+            <p class="book-description">${book.description}</p>
+        </div>
+    `).join('');
+    
+    console.log('Manual book loading complete');
+}
 
 // Navigation initialization
 function initializeNavigation() {
@@ -525,6 +617,7 @@ window.testNavigation = function() {
     console.log('- loginAdmin:', typeof window.loginAdmin);
     console.log('- loginToChat:', typeof window.loginToChat);
     console.log('- logout:', typeof window.logout);
+    console.log('- loadBooks:', typeof window.loadBooks);
 };
 
 // Log when main.js is fully loaded
