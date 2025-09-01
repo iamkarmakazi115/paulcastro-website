@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paul Castro - Author & IT Professional</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="home-page">
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navigation Sidebar -->
+    <nav class="nav-sidebar" id="navSidebar">
+        <div class="nav-logo">
+            <h1>Paul Castro</h1>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active">
+                <a href="index.html" class="nav-link" data-text="Home">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="about.html" class="nav-link" data-text="About Me">
+                    <i class="fas fa-user"></i> About Me
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="works.html" class="nav-link" data-text="My Works">
+                    <i class="fas fa-book"></i> My Works
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="social.html" class="nav-link" data-text="Social">
+                    <i class="fas fa-share-alt"></i> Social
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-text="Live Chat" onclick="requestChatAccess()">
+                    <i class="fas fa-comments"></i> Live Chat
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            <header class="page-header">
+                <h1 class="page-title">Welcome to My Digital Realm</h1>
+            </header>
+            
+            <div class="home-content">
+                <section class="hero-section">
+                    <h2>Author. IT Professional. Creator.</h2>
+                    <p class="hero-text">
+                        Step into a world where technology meets imagination. I'm Paul Castro, 
+                        an IT Network Administrator by day and a fantasy author by night. 
+                        This is where my two passions converge—crafting intricate digital networks 
+                        and weaving complex narrative worlds.
+                    </p>
+                </section>
+
+                <section class="featured-works">
+                    <h3>Latest Works in Progress</h3>
+                    <div class="featured-grid">
+                        <div class="featured-card">
+                            <h4>Blood Howls</h4>
+                            <p>When ancient blood awakens, the hunt begins...</p>
+                            <a href="works.html" class="read-more">Explore More →</a>
+                        </div>
+                        <div class="featured-card">
+                            <h4>The Descent: Ash Reborn</h4>
+                            <p>The fire within him was never meant to be carried by the living...</p>
+                            <a href="works.html" class="read-more">Explore More →</a>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="quick-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-book-open"></i>
+                        <h4>6</h4>
+                        <p>Books in Development</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-network-wired"></i>
+                        <h4>10+</h4>
+                        <p>Years in IT</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-dice-d20"></i>
+                        <h4>∞</h4>
+                        <p>Stories to Tell</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="contact-section">
+            <a href="tel:3462030833" class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>(346) 203-0833</span>
+            </a>
+            <a href="mailto:paul_castro@karmakazi.org" class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>paul_castro@karmakazi.org</span>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61579899121583" target="_blank" class="contact-item">
+                <i class="fab fa-facebook"></i>
+                <span>Facebook</span>
+            </a>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>
+
+<style>
+/* Additional Home Page Styles */
+.hero-section {
+    text-align: center;
+    padding: 3rem 0;
+    margin-bottom: 3rem;
+}
+
+.hero-section h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: 2rem;
+    color: var(--primary-red);
+    margin-bottom: 1rem;
+}
+
+.hero-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: var(--text-light);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.featured-works {
+    margin-bottom: 3rem;
+}
+
+.featured-works h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.8rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.featured-card {
+    background: rgba(42, 42, 42, 0.6);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.featured-card:before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--primary-red), transparent);
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.featured-card:hover:before {
+    opacity: 1;
+}
+
+.featured-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-red);
+}
+
+.featured-card h4 {
+    font-family: 'Orbitron', monospace;
+    color: var(--primary-red);
+    margin-bottom: 1rem;
+}
+
+.featured-card p {
+    color: #B0B0B0;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.read-more {
+    color: var(--primary-red);
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.read-more:hover {
+    color: var(--text-hover);
+    padding-left: 5px;
+}
+
+.quick-stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(10, 10, 10, 0.6);
+    border-radius: 10px;
+    min-width: 150px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: scale(1.05);
+    background: rgba(220, 20, 60, 0.1);
+}
+
+.stat-card i {
+    font-size: 2.5rem;
+    color: var(--primary-red);
+    margin-bottom: 1rem;
+}
+
+.stat-card h4 {
+    font-size: 2rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+    color: #888;
+    font-size: 0.9rem;
+}
+</style>

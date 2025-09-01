@@ -1,112 +1,74 @@
 # Paul Castro - Author Website
 
-A personal website for Paul Castro featuring his literary works, social media integration, and live chat functionality.
+## Overview
+Official website for Paul Castro, featuring his literary works, biography, and interactive community features.
 
 ## Features
+- **Author Portfolio**: Showcasing current works in progress
+- **About Section**: Professional background and interests
+- **Social Integration**: Live Facebook feed from author page
+- **Live Chat System**: Password-protected video/text chat rooms
+- **Admin Dashboard**: Complete control over chat rooms and user management
 
-- **Home Page**: Welcome page with gradient background and 3D navigation
-- **About Me**: Professional background and expertise
-- **My Works**: Showcase of literary works
-- **Social**: Facebook page integration
-- **Live Chat**: Password-protected live video/text chat with rooms
-- **Admin Panel**: Hidden admin interface for user and room management
-
-## Technologies Used
-
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Backend**: Node.js, Express, Socket.io
+## Technology Stack
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
+- **Backend**: Node.js with Express
 - **Database**: PostgreSQL
-- **Cache**: Redis
-- **Real-time**: WebRTC for video chat
-- **Hosting**: GitHub Pages (frontend), Ubuntu Server (backend)
+- **Real-time Communication**: WebRTC & Socket.io
+- **Hosting**: GitHub Pages (Frontend) + Local Server (Backend)
+- **SSL**: Let's Encrypt
+- **CDN/DNS**: Cloudflare
+
+## Project Structure
+```
+├── index.html          # Home page
+├── about.html          # About the author
+├── works.html          # Literary works showcase
+├── social.html         # Social media integration
+├── chat.html           # Live chat interface
+├── admin.html          # Admin dashboard (hidden)
+├── css/                # Stylesheets
+├── js/                 # JavaScript files
+└── assets/             # Images and media
+```
 
 ## Setup Instructions
 
 ### Frontend (GitHub Pages)
+1. Repository is configured with custom domain: paulcastro.karmakazi.org
+2. CNAME file points to the custom domain
+3. Cloudflare DNS configured for proxied A records
 
-1. Fork this repository
-2. Go to Settings > Pages
-3. Enable GitHub Pages from main branch
-4. Add custom domain: paulcastro.karmakazi.org
+### Backend (Local Server)
+- **Server IP**: 192.168.0.22
+- **Public IP**: 76.143.43.18
+- **Ports**: 80 (HTTP), 443 (HTTPS), 3001 (API)
+- **SSL Certificate**: Let's Encrypt for karmakazi.org
 
-### Backend (Ubuntu Server)
+## Contact Information
+- **Phone**: (346) 203-0833
+- **Email**: paul_castro@karmakazi.org
+- **Facebook**: [Author Page](https://www.facebook.com/profile.php?id=61579899121583)
 
-1. Run the database setup script:
-```bash
-sudo bash database-setup.sh
-```
+## Security Features
+- Password-protected live chat system
+- IP-based blocking for removed users
+- Admin-only access controls
+- Secure WebRTC implementation
 
-2. Configure the database:
-```bash
-sudo -u postgres psql -d paulcastro_db -f schema.sql
-```
-
-3. Install API dependencies:
-```bash
-cd /var/www/paulcastro-api
-npm install
-```
-
-4. Configure environment variables:
-```bash
-cp api.env .env
-# Edit .env file with your settings
-```
-
-5. Start the API server:
-```bash
-npm start
-```
-
-6. Configure Nginx:
-```bash
-sudo cp nginx-api.conf /etc/nginx/sites-available/paulcastro-api
-sudo ln -s /etc/nginx/sites-available/paulcastro-api /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl reload nginx
-```
-
-### Cloudflare DNS Configuration
-
-Add the following DNS records in Cloudflare:
-
-- **A Record**: paulcastro -> GitHub Pages IP (185.199.108.153)
-- **A Record**: paulcastro -> GitHub Pages IP (185.199.109.153)
-- **A Record**: paulcastro -> GitHub Pages IP (185.199.110.153)
-- **A Record**: paulcastro -> GitHub Pages IP (185.199.111.153)
-- **A Record**: api -> Your Public IP (76.143.43.18)
-
-### Port Forwarding
-
-Configure your router to forward the following ports to 192.168.0.22:
-
-- Port 443 -> 443 (HTTPS)
-- Port 80 -> 80 (HTTP)
-- Port 3001 -> 3001 (API)
-
-## Admin Access
-
-To access the admin panel, navigate to:
-```
-https://paulcastro.karmakazi.org/admin.html
-```
-
-Or add `?admin=secure-admin-2024` to the main URL to reveal the admin navigation.
-
-## Default Credentials
-
-Admin User:
-- Username: JohnC
-- Password: Gantz115!
-
-## Security Notes
-
-- Change all default passwords before deployment
-- Update JWT secret in production
-- Configure SSL certificates using Let's Encrypt
-- Regularly update dependencies
-- Monitor access logs
+## Books in Development
+- Blood Howls
+- Forgotten Son
+- Out of Time
+- Which Way the Wind Blows
+- The Descent (Book 1)
+- The Descent: Ash Reborn (Book 2)
 
 ## License
-
 © 2024 Paul Castro. All rights reserved.
+
+## Author
+Paul Castro - IT Network Administrator & Author
+
+---
+*Built with passion for literature and technology*

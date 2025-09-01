@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Paul Castro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="about-page">
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navigation Sidebar -->
+    <nav class="nav-sidebar" id="navSidebar">
+        <div class="nav-logo">
+            <h1>Paul Castro</h1>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link" data-text="Home">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a href="about.html" class="nav-link" data-text="About Me">
+                    <i class="fas fa-user"></i> About Me
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="works.html" class="nav-link" data-text="My Works">
+                    <i class="fas fa-book"></i> My Works
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="social.html" class="nav-link" data-text="Social">
+                    <i class="fas fa-share-alt"></i> Social
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-text="Live Chat" onclick="requestChatAccess()">
+                    <i class="fas fa-comments"></i> Live Chat
+                </a>
+            </li>
+        </ul>
+        <div class="back-home">
+            <a href="index.html" class="nav-link" data-text="← Back to Home">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            <header class="page-header">
+                <h1 class="page-title">About Paul Castro</h1>
+            </header>
+            
+            <div class="about-content">
+                <section class="bio-section">
+                    <div class="bio-image">
+                        <div class="image-placeholder">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="bio-text">
+                        <h2>Where Technology Meets Imagination</h2>
+                        <p>
+                            For over a decade, I've navigated the intricate landscapes of network architecture and system administration as an IT Network Administrator. My journey through the digital realm has been one of constant evolution—from troubleshooting complex network infrastructures to implementing cutting-edge security protocols that safeguard critical data systems.
+                        </p>
+                        <p>
+                            But when the servers quiet down and the networks hum steadily in the background, another passion ignites. I transform from network architect to world-builder, crafting intricate fantasy realms where ancient bloodlines clash with modern sensibilities, where gods walk among mortals, and where the line between monster and hero blurs with every choice.
+                        </p>
+                        <p>
+                            My love for tabletop role-playing games sparked this creative fire. Years of dungeon mastering taught me that the best stories aren't just told—they're experienced, lived, and shaped by the choices we make. This philosophy permeates every page I write, every character I breathe life into, and every world I construct from the ground up.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="skills-section">
+                    <h3>Professional Expertise</h3>
+                    <div class="skills-grid">
+                        <div class="skill-card">
+                            <i class="fas fa-network-wired"></i>
+                            <h4>Network Architecture</h4>
+                            <p>Designing and implementing robust network solutions that scale with organizational growth while maintaining security and performance.</p>
+                        </div>
+                        <div class="skill-card">
+                            <i class="fas fa-shield-alt"></i>
+                            <h4>Cybersecurity</h4>
+                            <p>Protecting digital assets through comprehensive security protocols, threat assessment, and proactive defense strategies.</p>
+                        </div>
+                        <div class="skill-card">
+                            <i class="fas fa-server"></i>
+                            <h4>System Administration</h4>
+                            <p>Managing complex server environments, ensuring 99.9% uptime, and optimizing performance across distributed systems.</p>
+                        </div>
+                        <div class="skill-card">
+                            <i class="fas fa-code"></i>
+                            <h4>Automation & Scripting</h4>
+                            <p>Developing custom solutions to streamline operations, reduce manual intervention, and enhance system efficiency.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="creative-section">
+                    <h3>Creative Passions</h3>
+                    <div class="passion-list">
+                        <div class="passion-item">
+                            <i class="fas fa-dice-d20"></i>
+                            <div>
+                                <h4>Tabletop Role-Playing Games</h4>
+                                <p>From classic Dungeons & Dragons campaigns to experimental indie systems, I've spent countless hours both behind the GM screen and as a player, exploring narratives that challenge, inspire, and entertain.</p>
+                            </div>
+                        </div>
+                        <div class="passion-item">
+                            <i class="fas fa-feather-alt"></i>
+                            <div>
+                                <h4>World-Building</h4>
+                                <p>Creating immersive universes with their own histories, mythologies, and rules. Each world is a living, breathing entity where every detail serves the greater narrative.</p>
+                            </div>
+                        </div>
+                        <div class="passion-item">
+                            <i class="fas fa-book-reader"></i>
+                            <div>
+                                <h4>Literary Exploration</h4>
+                                <p>An voracious reader across genres, constantly studying narrative techniques, character development, and the subtle art of keeping readers on the edge of their seats.</p>
+                            </div>
+                        </div>
+                        <div class="passion-item">
+                            <i class="fas fa-palette"></i>
+                            <div>
+                                <h4>Creative Synthesis</h4>
+                                <p>Blending technical precision with creative freedom, bringing the methodical problem-solving of IT into storytelling, creating narratives that are both logically consistent and emotionally resonant.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="philosophy-section">
+                    <h3>My Writing Philosophy</h3>
+                    <blockquote>
+                        "In both networks and narratives, the strongest connections are those we don't see coming. My goal is to create stories that resonate on multiple levels—entertaining on the surface while exploring deeper themes of identity, power, and the choices that define us. Whether I'm configuring a firewall or crafting a plot twist, I believe in building experiences that are secure in their foundation yet bold in their execution."
+                    </blockquote>
+                </section>
+
+                <section class="timeline-section">
+                    <h3>Journey Highlights</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h4>2014</h4>
+                                <p>Began professional IT career, specializing in network infrastructure</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h4>2016</h4>
+                                <p>Discovered passion for tabletop RPGs, started regular gaming groups</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h4>2019</h4>
+                                <p>Began seriously developing fantasy worlds and writing first drafts</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h4>2022</h4>
+                                <p>Advanced to senior network administrator role while developing multiple book projects</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h4>2024</h4>
+                                <p>Currently working on six major literary projects while maintaining IT excellence</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="contact-section">
+            <a href="tel:3462030833" class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>(346) 203-0833</span>
+            </a>
+            <a href="mailto:paul_castro@karmakazi.org" class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>paul_castro@karmakazi.org</span>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61579899121583" target="_blank" class="contact-item">
+                <i class="fab fa-facebook"></i>
+                <span>Facebook</span>
+            </a>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/about.js"></script>
+</body>
+</html>
+
+<style>
+/* Additional About Page Styles */
+.about-content {
+    padding-bottom: 100px;
+}
+
+.bio-section {
+    display: flex;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    align-items: flex-start;
+}
+
+.bio-image {
+    flex-shrink: 0;
+}
+
+.image-placeholder {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, var(--primary-red), var(--secondary-grey));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 100px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.bio-text {
+    flex: 1;
+}
+
+.bio-text h2 {
+    font-family: 'Orbitron', monospace;
+    color: var(--primary-red);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.bio-text p {
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+.skills-section,
+.creative-section,
+.philosophy-section,
+.timeline-section {
+    margin-bottom: 3rem;
+}
+
+.skills-section h3,
+.creative-section h3,
+.philosophy-section h3,
+.timeline-section h3 {
+    font-family: 'Orbitron', monospace;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.skill-card {
+    background: rgba(42, 42, 42, 0.6);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.skill-card:hover {
+    border-color: var(--primary-red);
+    transform: translateY(-5px);
+    background: rgba(220, 20, 60, 0.1);
+}
+
+.skill-card i {
+    font-size: 3rem;
+    color: var(--primary-red);
+    margin-bottom: 1rem;
+}
+
+.skill-card h4 {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+.skill-card p {
+    color: #B0B0B0;
+    line-height: 1.6;
+}
+
+.passion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.passion-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 1.5rem;
+    background: rgba(10, 10, 10, 0.4);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.passion-item:hover {
+    background: rgba(220, 20, 60, 0.05);
+    transform: translateX(10px);
+}
+
+.passion-item i {
+    font-size: 2rem;
+    color: var(--primary-red);
+    flex-shrink: 0;
+}
+
+.passion-item h4 {
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.passion-item p {
+    color: #B0B0B0;
+    line-height: 1.6;
+}
+
+.philosophy-section blockquote {
+    background: linear-gradient(135deg, rgba(220, 20, 60, 0.1), rgba(42, 42, 42, 0.3));
+    border-left: 4px solid var(--primary-red);
+    padding: 2rem;
+    font-style: italic;
+    color: var(--text-light);
+    line-height: 1.8;
+    border-radius: 5px;
+    position: relative;
+}
+
+.philosophy-section blockquote:before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    font-size: 60px;
+    color: var(--primary-red);
+    opacity: 0.3;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 50px;
+}
+
+.timeline:before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--primary-red), var(--secondary-grey));
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -35px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    background: var(--primary-red);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+}
+
+.timeline-content {
+    background: rgba(42, 42, 42, 0.6);
+    padding: 1.5rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.timeline-content:hover {
+    transform: translateX(10px);
+    background: rgba(220, 20, 60, 0.1);
+}
+
+.timeline-content h4 {
+    color: var(--primary-red);
+    margin-bottom: 0.5rem;
+}
+
+.timeline-content p {
+    color: #B0B0B0;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .bio-section {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
