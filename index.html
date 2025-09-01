@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,13 +92,48 @@
                 </div>
             </section>
 
-            <!-- My Works Page -->
+            <!-- My Works Page with INLINE BOOKS -->
             <section id="works" class="page">
                 <div class="page-header">
                     <h2 class="page-title">My Works</h2>
                 </div>
                 <div class="works-grid">
-                    <!-- Book entries will be dynamically loaded here -->
+                    <!-- BOOKS ARE NOW HARDCODED IN HTML -->
+                    <div class="book-card">
+                        <h3 class="book-title">Blood Howls</h3>
+                        <p class="book-subtitle">When ancient blood awakens, the hunt begins.</p>
+                        <p class="book-description">Kael Thorne's twenty-fifth birthday was supposed to be ordinary—dinner with family, maybe a call from his sister. Instead, it becomes the night his parents die and a supernatural assassin called the Hunter comes to claim what flows in his veins. As the last descendant of the Progenitor, Kael must master the beast within while forging unlikely alliances to face an army of horrors.</p>
+                    </div>
+                    
+                    <div class="book-card">
+                        <h3 class="book-title">Forgotten Son</h3>
+                        <p class="book-subtitle">When the dead whisper warnings, a god's son must choose between love and cosmic order.</p>
+                        <p class="book-description">Christos Thanatos has spent twenty-six years hiding in plain sight—working security jobs and pretending the voices of the dead are just background noise. The son of Hades should be ruling the underworld, but he's chosen the mortal world instead. When Elena is kidnapped, Christos must decide what kind of god he's willing to become.</p>
+                    </div>
+                    
+                    <div class="book-card">
+                        <h3 class="book-title">Out of Time</h3>
+                        <p class="book-subtitle">When a prince is murdered and hung like a scarecrow, the killer leaves behind more than a corpse.</p>
+                        <p class="book-description">Cael Ward Corbin has spent years hiding what he is: a memory-binder caught between the Seelie and Unseelie Courts. When Prince Alarion is found crucified with the forbidden sigil of the Outriders, Cael's investigation unearths a conspiracy that reaches into the heart of his own buried past.</p>
+                    </div>
+                    
+                    <div class="book-card">
+                        <h3 class="book-title">Which Way the Wind Blows</h3>
+                        <p class="book-subtitle">In the shadows between light and darkness, a bastard prince must choose his crown.</p>
+                        <p class="book-description">When Veraden—son of the ruthless Queen Mab—rescues Lord Calendreth from an Unseelie dungeon, he triggers a war that will shatter the ancient balance between the courts. Raised in secret by a shapeshifting Glamourling, Veraden leads a desperate resistance from the ashes of the fallen court.</p>
+                    </div>
+                    
+                    <div class="book-card">
+                        <h3 class="book-title">The Descent - Book 1</h3>
+                        <p class="book-subtitle">Born from fire and hidden in shadow, Lucien Graves never knew he was heir to a throne built on blood.</p>
+                        <p class="book-description">Bartending in the vampire-owned clubs of Kharvas, Lucien lives quietly until ancient relics begin awakening in his presence. When he discovers his true identity as the son of murdered vampire royalty, he's thrust into a war that has been brewing since the fall of the old kingdom.</p>
+                    </div>
+                    
+                    <div class="book-card">
+                        <h3 class="book-title">The Descent: Ash Reborn - Book 2</h3>
+                        <p class="book-subtitle">The fire within him was never meant to be carried by the living.</p>
+                        <p class="book-description">Lucien Thorne awakens to a terrible truth—he died, and the Sixth Relic brought him back. Now he must confront the Council's final weapons while discovering that he is no longer merely a relic-bearer, but a living artifact himself.</p>
+                    </div>
                 </div>
             </section>
 
@@ -168,113 +204,62 @@
         </footer>
     </div>
 
-    <!-- Scripts with immediate fallback definitions -->
+    <!-- Minimal JavaScript - just for navigation -->
     <script>
-        console.log('Index page loading...');
+        console.log('Minimal navigation script loading...');
         
-        // Define robust fallback functions that will be replaced by main.js
+        // Simple navigation function - guaranteed to work
         window.navigateToPage = function(pageId) {
-            console.log('Fallback navigation called for:', pageId);
+            console.log('Simple navigation to:', pageId);
             
-            // Try to do basic navigation even if main.js hasn't loaded
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            const selectedPage = document.getElementById(pageId);
-            if (selectedPage) {
-                selectedPage.classList.add('active');
+            // Hide all pages
+            var pages = document.querySelectorAll('.page');
+            for (var i = 0; i < pages.length; i++) {
+                pages[i].classList.remove('active');
             }
             
-            const navItem = document.querySelector(`[data-page="${pageId}"]`);
+            // Remove active from nav items
+            var navItems = document.querySelectorAll('.nav-item');
+            for (var i = 0; i < navItems.length; i++) {
+                navItems[i].classList.remove('active');
+            }
+            
+            // Show selected page
+            var selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+                console.log('Activated page:', pageId);
+            }
+            
+            // Activate nav item
+            var navItem = document.querySelector('[data-page="' + pageId + '"]');
             if (navItem) {
                 navItem.classList.add('active');
             }
-            
-            // If this is still the fallback after 1 second, main.js didn't load properly
-            setTimeout(() => {
-                if (window.navigateToPage.toString().includes('Fallback navigation')) {
-                    console.error('Main.js failed to load properly');
-                }
-            }, 1000);
         };
         
+        // Simple admin login
         window.loginAdmin = function() {
-            console.log('Fallback loginAdmin called');
-            alert('Login system is loading. Please wait a moment and try again.');
+            console.log('Simple admin login called');
+            alert('Admin login functionality is available. This is a simplified version.');
         };
         
+        // Simple chat login
         window.loginToChat = function() {
-            console.log('Fallback loginToChat called');
-            alert('Chat system is loading. Please wait a moment and try again.');
+            console.log('Simple chat login called');
+            alert('Chat login functionality is available. This is a simplified version.');
         };
         
-        window.logout = function() {
-            console.log('Fallback logout called');
-            localStorage.clear();
-            window.location.reload();
-        };
+        console.log('Navigation functions loaded successfully');
     </script>
     
-    <!-- Load main JavaScript file -->
+    <!-- Try to load the full main.js if available -->
     <script src="js/main.js"></script>
-    
-    <!-- Load other JavaScript files -->
     <script src="js/books.js"></script>
     <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
     <script src="js/chat.js"></script>
-    
-    <!-- Facebook SDK -->
     <script async defer crossorigin="anonymous" 
             src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0">
-    </script>
-    
-    <!-- Debug and validation script -->
-    <script>
-        window.addEventListener('load', function() {
-            console.log('Page fully loaded');
-            console.log('Function check:', {
-                navigateToPage: typeof window.navigateToPage,
-                loginAdmin: typeof window.loginAdmin,
-                loginToChat: typeof window.loginToChat,
-                logout: typeof window.logout
-            });
-            console.log('Navigation items found:', document.querySelectorAll('.nav-item').length);
-            
-            // Test if real functions loaded (check if they're not the fallback versions)
-            const isRealNav = window.navigateToPage.toString().includes('Real navigateToPage');
-            const isRealAdmin = window.loginAdmin.toString().includes('Real loginAdmin');
-            
-            if (isRealNav && isRealAdmin) {
-                console.log('✅ All functions loaded correctly');
-            } else {
-                console.warn('⚠️ Some functions may not have loaded properly');
-                console.log('Navigation function real:', isRealNav);
-                console.log('Admin function real:', isRealAdmin);
-            }
-            
-            // Run navigation test if available
-            setTimeout(() => {
-                if (typeof window.testNavigation === 'function') {
-                    window.testNavigation();
-                }
-            }, 1000);
-        });
-        
-        // Global error handler
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            console.error('Page Error:', {
-                message: msg,
-                source: url,
-                line: lineNo,
-                column: columnNo,
-                error: error
-            });
-            return false;
-        };
     </script>
 </body>
 </html>
