@@ -168,7 +168,7 @@
                         <p>Please login to access the live chat rooms</p>
                         <input type="text" id="chatUsername" placeholder="Username" autocomplete="username">
                         <input type="password" id="chatPassword" placeholder="Password" autocomplete="current-password">
-                        <button class="login-btn" onclick="loginToChat()">Enter Chat</button>
+                        <button class="login-btn" onclick="if(typeof window.loginToChat === 'function') window.loginToChat(); else alert('Login function not loaded yet, please refresh the page');">Enter Chat</button>
                         <div class="error-message" id="loginError"></div>
                     </div>
                 </div>
