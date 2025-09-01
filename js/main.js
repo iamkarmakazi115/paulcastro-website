@@ -1,6 +1,46 @@
 // MAIN.JS - CRITICAL FUNCTIONS FIRST
 console.log('Main.js emergency version loading...');
 
+// CRITICAL: Fix token retrieval function
+function getAuthToken() {
+    // Check both localStorage and sessionStorage
+    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    
+    if (!token) {
+        console.log('No auth token found in storage');
+        return null;
+    }
+    
+    // Verify token format and expiration
+    try {
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+            console.log('Invalid token format');
+            localStorage.removeItem('authToken');
+            sessionStorage.removeItem('authToken');
+            return null;
+        }
+        
+        const payload = JSON.parse(atob(parts[1]));
+        const now = Math.floor(Date.now() / 1000);
+        
+        if (payload.exp && payload.exp < now) {
+            console.log('Token expired');
+            localStorage.removeItem('authToken');
+            sessionStorage.removeItem('authToken');
+            return null;
+        }
+        
+        console.log('Valid token found for user:', payload.username);
+        return token;
+    } catch (error) {
+        console.error('Error parsing token:', error);
+        localStorage.removeItem('authToken');
+        sessionStorage.removeItem('authToken');
+        return null;
+    }
+}
+
 // IMMEDIATE FUNCTION DEFINITIONS (MUST BE FIRST)
 window.navigateToPage = function(pageId) {
     console.log('Emergency navigateToPage called for:', pageId);
@@ -24,8 +64,18 @@ window.loginAdmin = function() {
     const errorDiv = document.getElementById('adminLoginError');
     if (!username || !password) return;
     if (username.value.trim() === 'JohnC' && password.value.trim() === 'Gantz115!') {
-        localStorage.setItem('authToken', 'admin-token-' + Date.now());
-        localStorage.setItem('currentUser', JSON.stringify({username: 'JohnC', role: 'admin'}));
+        // Create a proper JWT-like token for consistency
+        const mockToken = btoa(JSON.stringify({alg: "HS256", typ: "JWT"})) + '.' + 
+                         btoa(JSON.stringify({id: 1, username: 'JohnC', role: 'admin', exp: Math.floor(Date.now()/1000) + 86400})) + 
+                         '.mock-signature';
+        
+        localStorage.setItem('authToken', mockToken);
+        localStorage.setItem('currentUser', JSON.stringify({username: 'JohnC', role: 'admin', id: 1}));
+        
+        // Update global variables
+        window.authToken = mockToken;
+        window.currentUser = {username: 'JohnC', role: 'admin', id: 1};
+        
         username.value = '';
         password.value = '';
         const adminLogin = document.getElementById('adminLogin');
@@ -33,7 +83,7 @@ window.loginAdmin = function() {
         if (adminLogin) adminLogin.style.display = 'none';
         if (adminInterface) {
             adminInterface.style.display = 'block';
-            adminInterface.innerHTML = '<div style="padding:2rem;color:#fff;"><h3>Admin Login Successful!</h3><p>Welcome, ' + username + '</p><button onclick="window.logout()">Logout</button></div>';
+            adminInterface.innerHTML = '<div style="padding:2rem;color:#fff;"><h3>Admin Login Successful!</h3><p>Welcome, JohnC</p><button onclick="window.logout()">Logout</button></div>';
         }
         if (errorDiv) errorDiv.textContent = '';
     } else {
@@ -62,27 +112,49 @@ window.loginToChat = async function() {
     
     try {
         console.log('Attempting chat login for:', username);
-        const response = await fetch('https://api.karmakazi.org/api/auth/login', {
+        
+        // FIXED: Remove duplicate /api in URL path
+        const response = await fetch('https://api.karmakazi.org/auth/login', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
             body: JSON.stringify({ username, password })
         });
         
+        console.log('Response status:', response.status);
+        
         if (!response.ok) {
-            const error = await response.json();
-            console.error('Login failed:', error);
-            if (errorDiv) errorDiv.textContent = error.error || 'Login failed';
+            let errorMsg = 'Login failed';
+            try {
+                const error = await response.json();
+                errorMsg = error.error || error.message || `HTTP ${response.status}`;
+            } catch (e) {
+                errorMsg = `HTTP ${response.status} - ${response.statusText}`;
+            }
+            
+            console.error('Login failed:', errorMsg);
+            if (errorDiv) {
+                errorDiv.style.color = '#f44336';
+                errorDiv.textContent = errorMsg;
+            }
             return;
         }
         
         const data = await response.json();
-        console.log('Chat login successful:', data.user);
+        console.log('Chat login successful:', data.user || data);
         
-        // Store authentication data
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('currentUser', JSON.stringify(data.user));
-        window.authToken = data.token;
-        window.currentUser = data.user;
+        // Store authentication data properly
+        const token = data.token;
+        const user = data.user || {username: username, id: data.id};
+        
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        
+        // Update global variables immediately
+        window.authToken = token;
+        window.currentUser = user;
         
         // Clear form and show success
         usernameInput.value = '';
@@ -99,15 +171,35 @@ window.loginToChat = async function() {
         
     } catch (error) {
         console.error('Chat login error:', error);
-        if (errorDiv) errorDiv.textContent = 'Connection error. Please try again.';
+        if (errorDiv) {
+            errorDiv.style.color = '#f44336';
+            errorDiv.textContent = 'Connection error. Please check your internet connection.';
+        }
     }
 };
 
 window.logout = function() {
-    localStorage.clear();
+    console.log('Logging out user');
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('currentUser');
     window.authToken = null;
     window.currentUser = null;
-    location.reload();
+    
+    // Reset UI elements
+    const adminLogin = document.getElementById('adminLogin');
+    const adminInterface = document.getElementById('adminInterface');
+    const chatLogin = document.getElementById('chatLogin');
+    const chatInterface = document.getElementById('chatInterface');
+    
+    if (adminLogin) adminLogin.style.display = 'block';
+    if (adminInterface) adminInterface.style.display = 'none';
+    if (chatLogin) chatLogin.style.display = 'block';
+    if (chatInterface) chatInterface.style.display = 'none';
+    
+    // Navigate to home
+    window.navigateToPage('home');
 };
 
 // IMMEDIATE INITIALIZATION
@@ -136,18 +228,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Initialize auth state on page load
+    initializeAuthState();
+    
     console.log('Emergency initialization complete');
 });
 
 // EVERYTHING BELOW THIS POINT IS ADDITIONAL FUNCTIONALITY
 // API Configuration
 const API_URL = 'https://api.karmakazi.org';
-let authToken = localStorage.getItem('authToken');
-let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
 
-// Make authToken and currentUser globally accessible
-window.authToken = authToken;
-window.currentUser = currentUser;
+// Initialize authentication state
+function initializeAuthState() {
+    const token = getAuthToken();
+    const userStr = localStorage.getItem('currentUser');
+    
+    if (token && userStr) {
+        try {
+            const user = JSON.parse(userStr);
+            window.authToken = token;
+            window.currentUser = user;
+            console.log('Restored auth state for user:', user.username);
+        } catch (error) {
+            console.error('Error parsing stored user:', error);
+            localStorage.removeItem('currentUser');
+            window.authToken = null;
+            window.currentUser = null;
+        }
+    } else {
+        window.authToken = null;
+        window.currentUser = null;
+    }
+}
 
 // Enhanced navigation function (overwrites the emergency version)
 function navigateToPage(pageId) {
@@ -175,109 +287,10 @@ function navigateToPage(pageId) {
     }
 }
 
-// Enhanced admin login (overwrites emergency version)
-async function loginAdmin() {
-    console.log('Enhanced loginAdmin called');
-    
-    const usernameInput = document.getElementById('adminUsername');
-    const passwordInput = document.getElementById('adminPassword');
-    const errorDiv = document.getElementById('adminLoginError');
-    
-    if (!usernameInput || !passwordInput) {
-        if (errorDiv) errorDiv.textContent = 'Login form not found';
-        return;
-    }
-    
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
-    
-    if (!username || !password) {
-        if (errorDiv) errorDiv.textContent = 'Please enter both username and password';
-        return;
-    }
-    
-    if (username === 'JohnC' && password === 'Gantz115!') {
-        console.log('Admin login successful');
-        if (errorDiv) errorDiv.textContent = '';
-        
-        authToken = 'mock-admin-token-' + Date.now();
-        currentUser = { username: 'JohnC', role: 'admin', id: 1 };
-        localStorage.setItem('authToken', authToken);
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        window.authToken = authToken;
-        window.currentUser = currentUser;
-        
-        usernameInput.value = '';
-        passwordInput.value = '';
-        
-        loadAdminInterface();
-        return;
-    }
-    
-    if (errorDiv) errorDiv.textContent = 'Invalid admin credentials';
-}
-
-// Chat login function - FIXED VERSION
-async function loginToChat() {
-    console.log('Enhanced loginToChat called');
-    const usernameInput = document.getElementById('chatUsername');
-    const passwordInput = document.getElementById('chatPassword');
-    const errorDiv = document.getElementById('loginError');
-    
-    if (!usernameInput || !passwordInput) {
-        if (errorDiv) errorDiv.textContent = 'Login form not found';
-        return;
-    }
-    
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
-    
-    if (!username || !password) {
-        if (errorDiv) errorDiv.textContent = 'Please enter both username and password';
-        return;
-    }
-    
-    try {
-        const response = await fetch(`${API_URL}/api/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
-        
-        if (!response.ok) {
-            const error = await response.json();
-            if (errorDiv) errorDiv.textContent = error.error || 'Login failed';
-            return;
-        }
-        
-        const data = await response.json();
-        authToken = data.token;
-        currentUser = data.user;
-        localStorage.setItem('authToken', authToken);
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        window.authToken = authToken;
-        window.currentUser = currentUser;
-        
-        usernameInput.value = '';
-        passwordInput.value = '';
-        if (errorDiv) errorDiv.textContent = '';
-        
-        loadChatInterface();
-    } catch (error) {
-        console.error('Enhanced chat login error:', error);
-        if (errorDiv) errorDiv.textContent = 'Connection error. Please try again.';
-    }
-}
-
-// Update window functions with enhanced versions - but the emergency versions will override these
-// window.navigateToPage = navigateToPage;
-// window.loginAdmin = loginAdmin;
-// window.loginToChat = loginToChat;
-
 // Track page visits
 async function trackPageVisit(page) {
     try {
-        await fetch(`${API_URL}/api/analytics`, {
+        await fetch(`${API_URL}/analytics`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ page_visited: page, referrer: document.referrer })
@@ -287,20 +300,37 @@ async function trackPageVisit(page) {
     }
 }
 
-// Check chat access
+// FIXED: Check chat access function
 function checkChatAccess() {
-    console.log('Checking chat access, authToken:', !!authToken);
-    if (!authToken) {
-        const chatLogin = document.getElementById('chatLogin');
-        const chatInterface = document.getElementById('chatInterface');
+    const token = getAuthToken();
+    console.log('Checking chat access, authToken:', !!token);
+    
+    const chatLogin = document.getElementById('chatLogin');
+    const chatInterface = document.getElementById('chatInterface');
+    
+    if (!token) {
+        console.log('No valid token, showing login form');
         if (chatLogin) chatLogin.style.display = 'block';
         if (chatInterface) chatInterface.style.display = 'none';
     } else {
+        console.log('Valid token found, loading chat interface');
+        // Update global variables if they're not set
+        if (!window.authToken) {
+            window.authToken = token;
+            const userStr = localStorage.getItem('currentUser');
+            if (userStr) {
+                try {
+                    window.currentUser = JSON.parse(userStr);
+                } catch (error) {
+                    console.error('Error parsing stored user:', error);
+                }
+            }
+        }
         loadChatInterface();
     }
 }
 
-// Load chat interface
+// FIXED: Load chat interface
 function loadChatInterface() {
     console.log('Loading chat interface...');
     const chatLogin = document.getElementById('chatLogin');
@@ -313,17 +343,34 @@ function loadChatInterface() {
         // Initialize chat if function exists
         if (typeof initializeChat === 'function') {
             console.log('Initializing chat...');
-            initializeChat();
+            try {
+                initializeChat();
+            } catch (error) {
+                console.error('Error initializing chat:', error);
+                chatInterface.innerHTML = `
+                    <div style="padding: 2rem; text-align: center; color: #fff;">
+                        <h3>Chat Initialization Error</h3>
+                        <p>There was an error loading the chat interface.</p>
+                        <p>Error: ${error.message}</p>
+                        <button onclick="window.logout()">Logout and Retry</button>
+                    </div>
+                `;
+            }
         } else {
+            console.log('initializeChat function not found, showing fallback');
             // Fallback: show a basic interface
             chatInterface.innerHTML = `
                 <div style="padding: 2rem; text-align: center; color: #fff;">
                     <h3>Chat Interface Loading...</h3>
-                    <p>Welcome, ${currentUser ? currentUser.username : 'User'}!</p>
+                    <p>Welcome, ${window.currentUser ? window.currentUser.username : 'User'}!</p>
                     <p>Chat functionality is being initialized.</p>
+                    <p><small>If this message persists, please refresh the page.</small></p>
+                    <button onclick="window.logout()">Logout</button>
                 </div>
             `;
         }
+    } else {
+        console.error('Chat interface element not found');
     }
 }
 
@@ -388,8 +435,8 @@ function loadAdminInterface() {
             <div class="admin-section">
                 <h3>Welcome, Admin!</h3>
                 <p>Successfully logged in as admin.</p>
-                <p><strong>Username:</strong> ${currentUser ? currentUser.username : 'Unknown'}</p>
-                <p><strong>Role:</strong> ${currentUser ? currentUser.role : 'Unknown'}</p>
+                <p><strong>Username:</strong> ${window.currentUser ? window.currentUser.username : 'Unknown'}</p>
+                <p><strong>Role:</strong> ${window.currentUser ? window.currentUser.role : 'Unknown'}</p>
                 <p><strong>Login Time:</strong> ${new Date().toLocaleString()}</p>
                 <button onclick="logout()">Logout</button>
             </div>
@@ -407,28 +454,6 @@ function loadAdminInterface() {
         if (timeElement) timeElement.textContent = new Date().toLocaleString();
     }, 1000);
 }
-
-// Enhanced logout function
-window.logout = function() {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('currentUser');
-    authToken = null;
-    currentUser = null;
-    window.authToken = null;
-    window.currentUser = null;
-    
-    const adminLogin = document.getElementById('adminLogin');
-    const adminInterface = document.getElementById('adminInterface');
-    const chatLogin = document.getElementById('chatLogin');
-    const chatInterface = document.getElementById('chatInterface');
-    
-    if (adminLogin) adminLogin.style.display = 'block';
-    if (adminInterface) adminInterface.style.display = 'none';
-    if (chatLogin) chatLogin.style.display = 'block';
-    if (chatInterface) chatInterface.style.display = 'none';
-    
-    navigateToPage('home');
-};
 
 // Initialize everything after DOM loads (enhanced version)
 setTimeout(function() {
@@ -452,6 +477,7 @@ console.log('All functions available:', {
 });
 
 // Check if user is already logged in on page load
-if (authToken && currentUser) {
-    console.log('Found existing auth token for user:', currentUser.username);
+const initialToken = getAuthToken();
+if (initialToken && window.currentUser) {
+    console.log('Found existing auth token for user:', window.currentUser.username);
 }
