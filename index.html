@@ -15,19 +15,19 @@
         <!-- Navigation Sidebar -->
         <nav class="sidebar">
             <div class="nav-container">
-                <div class="nav-item active" data-page="home">
+                <div class="nav-item active" data-page="home" onclick="navigateToPage('home')">
                     <span class="nav-text">Home</span>
                 </div>
-                <div class="nav-item" data-page="about">
+                <div class="nav-item" data-page="about" onclick="navigateToPage('about')">
                     <span class="nav-text">About Me</span>
                 </div>
-                <div class="nav-item" data-page="works">
+                <div class="nav-item" data-page="works" onclick="navigateToPage('works')">
                     <span class="nav-text">My Works</span>
                 </div>
-                <div class="nav-item" data-page="social">
+                <div class="nav-item" data-page="social" onclick="navigateToPage('social')">
                     <span class="nav-text">Social</span>
                 </div>
-                <div class="nav-item" data-page="chat" id="chatNav">
+                <div class="nav-item" data-page="chat" id="chatNav" onclick="navigateToPage('chat')">
                     <span class="nav-text">Live Chat</span>
                 </div>
             </div>
@@ -168,13 +168,48 @@
         </footer>
     </div>
 
-    <!-- Scripts -->
+    <!-- Scripts - Load main.js first to ensure functions are available -->
+    <script>
+        // Ensure functions are available immediately for inline onclick handlers
+        window.navigateToPage = window.navigateToPage || function(pageId) {
+            console.log('Fallback navigation called for:', pageId);
+            // This will be replaced when main.js loads
+        };
+        
+        window.loginAdmin = window.loginAdmin || function() {
+            console.log('Fallback loginAdmin called');
+            // This will be replaced when main.js loads
+        };
+        
+        window.loginToChat = window.loginToChat || function() {
+            console.log('Fallback loginToChat called');
+            // This will be replaced when main.js loads
+        };
+    </script>
     <script src="js/main.js"></script>
     <script src="js/books.js"></script>
     <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
     <script src="js/chat.js"></script>
     <script async defer crossorigin="anonymous" 
             src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0">
+    </script>
+    
+    <!-- Debug script to help troubleshoot -->
+    <script>
+        // Debug function to check if everything loaded
+        window.addEventListener('load', function() {
+            console.log('Page fully loaded');
+            console.log('navigateToPage function available:', typeof window.navigateToPage);
+            console.log('loginAdmin function available:', typeof window.loginAdmin);
+            console.log('Navigation items found:', document.querySelectorAll('.nav-item').length);
+            
+            // Test navigation programmatically
+            setTimeout(() => {
+                if (typeof window.testNavigation === 'function') {
+                    window.testNavigation();
+                }
+            }, 1000);
+        });
     </script>
 </body>
 </html>
