@@ -400,73 +400,6 @@ body {
     box-shadow: 0 4px 10px rgba(220, 20, 60, 0.3);
 }
 
-/* Works Page */
-.works-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.book-card {
-    background: rgba(26, 26, 26, 0.8);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 2rem;
-    border: 1px solid rgba(220, 20, 60, 0.2);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.book-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    animation: scan 3s linear infinite;
-}
-
-@keyframes scan {
-    from {
-        transform: translateX(-100%);
-    }
-    to {
-        transform: translateX(100%);
-    }
-}
-
-.book-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(220, 20, 60, 0.3);
-    border-color: var(--accent);
-}
-
-.book-title {
-    font-family: 'Orbitron', monospace;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
-}
-
-.book-subtitle {
-    font-style: italic;
-    color: rgba(224, 224, 224, 0.7);
-    margin-bottom: 1rem;
-    font-size: 0.95rem;
-}
-
-.book-description {
-    line-height: 1.6;
-    color: rgba(224, 224, 224, 0.85);
-    font-size: 0.95rem;
-}
-
 /* Social Page */
 .social-content {
     max-width: 800px;
@@ -637,10 +570,6 @@ body {
     
     .glitch {
         font-size: 3rem;
-    }
-    
-    .works-grid {
-        grid-template-columns: 1fr;
     }
     
     .contact-info {

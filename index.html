@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,9 +21,6 @@
                 <div class="nav-item" data-page="about" onclick="navigateToPage('about')">
                     <span class="nav-text">About Me</span>
                 </div>
-                <div class="nav-item" data-page="works" onclick="navigateToPage('works')">
-                    <span class="nav-text">My Works</span>
-                </div>
                 <div class="nav-item" data-page="social" onclick="navigateToPage('social')">
                     <span class="nav-text">Social</span>
                 </div>
@@ -42,11 +38,11 @@
                     <h1 class="glitch" data-text="Paul Castro">Paul Castro</h1>
                     <p class="subtitle">Author | IT Network Administrator | Creator</p>
                     <div class="hero-description">
-                        <p>Welcome to my digital realm where technology meets imagination. Explore my literary works, 
-                        connect with my journey, and join the community of readers and tech enthusiasts.</p>
+                        <p>Welcome to my digital realm where technology meets imagination. Connect with my journey 
+                        and join the community of readers and tech enthusiasts.</p>
                     </div>
                     <div class="cta-buttons">
-                        <button class="cta-btn primary" onclick="navigateToPage('works')">Explore My Works</button>
+                        <button class="cta-btn primary" onclick="navigateToPage('social')">Connect With Me</button>
                         <button class="cta-btn secondary" onclick="navigateToPage('about')">Learn More</button>
                     </div>
                 </div>
@@ -88,51 +84,6 @@
                             <span class="skill-tag">World Building</span>
                             <span class="skill-tag">Narrative Design</span>
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- My Works Page with INLINE BOOKS -->
-            <section id="works" class="page">
-                <div class="page-header">
-                    <h2 class="page-title">My Works</h2>
-                </div>
-                <div class="works-grid">
-                    <!-- BOOKS ARE NOW HARDCODED IN HTML -->
-                    <div class="book-card">
-                        <h3 class="book-title">Blood Howls</h3>
-                        <p class="book-subtitle">When ancient blood awakens, the hunt begins.</p>
-                        <p class="book-description">Kael Thorne's twenty-fifth birthday was supposed to be ordinary—dinner with family, maybe a call from his sister. Instead, it becomes the night his parents die and a supernatural assassin called the Hunter comes to claim what flows in his veins. As the last descendant of the Progenitor, Kael must master the beast within while forging unlikely alliances to face an army of horrors.</p>
-                    </div>
-                    
-                    <div class="book-card">
-                        <h3 class="book-title">Forgotten Son</h3>
-                        <p class="book-subtitle">When the dead whisper warnings, a god's son must choose between love and cosmic order.</p>
-                        <p class="book-description">Christos Thanatos has spent twenty-six years hiding in plain sight—working security jobs and pretending the voices of the dead are just background noise. The son of Hades should be ruling the underworld, but he's chosen the mortal world instead. When Elena is kidnapped, Christos must decide what kind of god he's willing to become.</p>
-                    </div>
-                    
-                    <div class="book-card">
-                        <h3 class="book-title">Out of Time</h3>
-                        <p class="book-subtitle">When a prince is murdered and hung like a scarecrow, the killer leaves behind more than a corpse.</p>
-                        <p class="book-description">Cael Ward Corbin has spent years hiding what he is: a memory-binder caught between the Seelie and Unseelie Courts. When Prince Alarion is found crucified with the forbidden sigil of the Outriders, Cael's investigation unearths a conspiracy that reaches into the heart of his own buried past.</p>
-                    </div>
-                    
-                    <div class="book-card">
-                        <h3 class="book-title">Which Way the Wind Blows</h3>
-                        <p class="book-subtitle">In the shadows between light and darkness, a bastard prince must choose his crown.</p>
-                        <p class="book-description">When Veraden—son of the ruthless Queen Mab—rescues Lord Calendreth from an Unseelie dungeon, he triggers a war that will shatter the ancient balance between the courts. Raised in secret by a shapeshifting Glamourling, Veraden leads a desperate resistance from the ashes of the fallen court.</p>
-                    </div>
-                    
-                    <div class="book-card">
-                        <h3 class="book-title">The Descent - Book 1</h3>
-                        <p class="book-subtitle">Born from fire and hidden in shadow, Lucien Graves never knew he was heir to a throne built on blood.</p>
-                        <p class="book-description">Bartending in the vampire-owned clubs of Kharvas, Lucien lives quietly until ancient relics begin awakening in his presence. When he discovers his true identity as the son of murdered vampire royalty, he's thrust into a war that has been brewing since the fall of the old kingdom.</p>
-                    </div>
-                    
-                    <div class="book-card">
-                        <h3 class="book-title">The Descent: Ash Reborn - Book 2</h3>
-                        <p class="book-subtitle">The fire within him was never meant to be carried by the living.</p>
-                        <p class="book-description">Lucien Thorne awakens to a terrible truth—he died, and the Sixth Relic brought him back. Now he must confront the Council's final weapons while discovering that he is no longer merely a relic-bearer, but a living artifact himself.</p>
                     </div>
                 </div>
             </section>
@@ -255,7 +206,6 @@
     
     <!-- Try to load the full main.js if available -->
     <script src="js/main.js"></script>
-    <script src="js/books.js"></script>
     <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
     <script src="js/chat.js"></script>
     <script async defer crossorigin="anonymous" 

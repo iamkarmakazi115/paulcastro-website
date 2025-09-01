@@ -10,7 +10,6 @@ window.navigateToPage = function(pageId) {
     if (selectedPage) selectedPage.classList.add('active');
     const navItem = document.querySelector(`[data-page="${pageId}"]`);
     if (navItem) navItem.classList.add('active');
-    if (pageId === 'works') setTimeout(window.loadBooks, 100);
 };
 
 window.loginAdmin = function() {
@@ -47,25 +46,6 @@ window.logout = function() {
     location.reload();
 };
 
-// BOOKS LOADING FUNCTION
-window.loadBooks = function() {
-    console.log('Emergency loadBooks called');
-    const worksGrid = document.querySelector('.works-grid');
-    if (!worksGrid) return;
-    
-    const books = [
-        {title: "Blood Howls", subtitle: "When ancient blood awakens, the hunt begins.", description: "Kael Thorne's twenty-fifth birthday was supposed to be ordinary—dinner with family, maybe a call from his sister. Instead, it becomes the night his parents die and a supernatural assassin called the Hunter comes to claim what flows in his veins."},
-        {title: "Forgotten Son", subtitle: "When the dead whisper warnings, a god's son must choose between love and cosmic order.", description: "Christos Thanatos has spent twenty-six years hiding in plain sight—working security jobs and pretending the voices of the dead are just background noise. The son of Hades should be ruling the underworld, but he's chosen the mortal world instead."},
-        {title: "Out of Time", subtitle: "When a prince is murdered and hung like a scarecrow, the killer leaves behind more than a corpse.", description: "Cael Ward Corbin has spent years hiding what he is: a memory-binder caught between the Seelie and Unseelie Courts. When Prince Alarion is found crucified with the forbidden sigil of the Outriders, Cael's investigation unearths a conspiracy."},
-        {title: "Which Way the Wind Blows", subtitle: "In the shadows between light and darkness, a bastard prince must choose his crown.", description: "When Veraden—son of the ruthless Queen Mab—rescues Lord Calendreth from an Unseelie dungeon, he triggers a war that will shatter the ancient balance between the courts."},
-        {title: "The Descent - Book 1", subtitle: "Born from fire and hidden in shadow, Lucien Graves never knew he was heir to a throne built on blood.", description: "Bartending in the vampire-owned clubs of Kharvas, Lucien lives quietly until ancient relics begin awakening in his presence. When he discovers his true identity as the son of murdered vampire royalty, he's thrust into a war."},
-        {title: "The Descent: Ash Reborn - Book 2", subtitle: "The fire within him was never meant to be carried by the living.", description: "Lucien Thorne awakens to a terrible truth—he died, and the Sixth Relic brought him back. Now he must confront the Council's final weapons while discovering that he is no longer merely a relic-bearer, but a living artifact himself."}
-    ];
-    
-    worksGrid.innerHTML = books.map(book => `<div class="book-card" style="opacity:1;transform:translateY(0);"><h3 class="book-title">${book.title}</h3><p class="book-subtitle">${book.subtitle}</p><p class="book-description">${book.description}</p></div>`).join('');
-    console.log('Books loaded successfully - ' + books.length + ' books');
-};
-
 // IMMEDIATE INITIALIZATION
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Emergency DOM initialization');
@@ -91,12 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
-    
-    // Load books immediately if on works page
-    const worksPage = document.getElementById('works');
-    if (worksPage && worksPage.classList.contains('active')) {
-        setTimeout(window.loadBooks, 100);
-    }
     
     console.log('Emergency initialization complete');
 });
@@ -128,10 +102,7 @@ function navigateToPage(pageId) {
     
     trackPageVisit(pageId);
     
-    if (pageId === 'works') {
-        console.log('Loading books for works page');
-        setTimeout(window.loadBooks, 100);
-    } else if (pageId === 'chat') {
+    if (pageId === 'chat') {
         checkChatAccess();
     }
 }
@@ -375,11 +346,6 @@ setTimeout(function() {
     }
 }, 500);
 
-// Add CSS for book animations
-const bookStyle = document.createElement('style');
-bookStyle.textContent = '.book-card{opacity:0;transform:translateY(30px);transition:opacity 0.5s ease,transform 0.5s ease;}';
-document.head.appendChild(bookStyle);
-
 // Error handling
 window.onerror = function(msg, url, lineNo, columnNo, error) {
     console.error('JavaScript Error:', { message: msg, source: url, line: lineNo, column: columnNo, error: error });
@@ -391,6 +357,5 @@ console.log('All functions available:', {
     navigateToPage: typeof window.navigateToPage,
     loginAdmin: typeof window.loginAdmin,
     loginToChat: typeof window.loginToChat,
-    logout: typeof window.logout,
-    loadBooks: typeof window.loadBooks
+    logout: typeof window.logout
 });
