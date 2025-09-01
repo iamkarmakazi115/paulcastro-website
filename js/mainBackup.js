@@ -10,11 +10,6 @@ window.navigateToPage = function(pageId) {
     if (selectedPage) selectedPage.classList.add('active');
     const navItem = document.querySelector(`[data-page="${pageId}"]`);
     if (navItem) navItem.classList.add('active');
-    
-    // Check chat access when navigating to chat
-    if (pageId === 'chat') {
-        checkChatAccess();
-    }
 };
 
 window.loginAdmin = function() {
@@ -41,72 +36,13 @@ window.loginAdmin = function() {
     }
 };
 
-window.loginToChat = async function() {
-    console.log('Emergency loginToChat called - now with API integration');
-    const usernameInput = document.getElementById('chatUsername');
-    const passwordInput = document.getElementById('chatPassword');
-    const errorDiv = document.getElementById('loginError');
-    
-    if (!usernameInput || !passwordInput) {
-        if (errorDiv) errorDiv.textContent = 'Login form not found';
-        return;
-    }
-    
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
-    
-    if (!username || !password) {
-        if (errorDiv) errorDiv.textContent = 'Please enter both username and password';
-        return;
-    }
-    
-    try {
-        console.log('Attempting chat login for:', username);
-        const response = await fetch('https://api.karmakazi.org/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
-        
-        if (!response.ok) {
-            const error = await response.json();
-            console.error('Login failed:', error);
-            if (errorDiv) errorDiv.textContent = error.error || 'Login failed';
-            return;
-        }
-        
-        const data = await response.json();
-        console.log('Chat login successful:', data.user);
-        
-        // Store authentication data
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('currentUser', JSON.stringify(data.user));
-        window.authToken = data.token;
-        window.currentUser = data.user;
-        
-        // Clear form and show success
-        usernameInput.value = '';
-        passwordInput.value = '';
-        if (errorDiv) {
-            errorDiv.style.color = '#4CAF50';
-            errorDiv.textContent = 'Login successful! Loading chat interface...';
-        }
-        
-        // Load chat interface after brief delay
-        setTimeout(() => {
-            loadChatInterface();
-        }, 1000);
-        
-    } catch (error) {
-        console.error('Chat login error:', error);
-        if (errorDiv) errorDiv.textContent = 'Connection error. Please try again.';
-    }
+window.loginToChat = function() {
+    console.log('Emergency loginToChat called');
+    alert('Chat login functionality is available.');
 };
 
 window.logout = function() {
     localStorage.clear();
-    window.authToken = null;
-    window.currentUser = null;
     location.reload();
 };
 
@@ -143,11 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // API Configuration
 const API_URL = 'https://api.karmakazi.org';
 let authToken = localStorage.getItem('authToken');
-let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-
-// Make authToken and currentUser globally accessible
-window.authToken = authToken;
-window.currentUser = currentUser;
+let currentUser = null;
 
 // Enhanced navigation function (overwrites the emergency version)
 function navigateToPage(pageId) {
@@ -204,8 +136,6 @@ async function loginAdmin() {
         currentUser = { username: 'JohnC', role: 'admin', id: 1 };
         localStorage.setItem('authToken', authToken);
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        window.authToken = authToken;
-        window.currentUser = currentUser;
         
         usernameInput.value = '';
         passwordInput.value = '';
@@ -217,9 +147,8 @@ async function loginAdmin() {
     if (errorDiv) errorDiv.textContent = 'Invalid admin credentials';
 }
 
-// Chat login function - FIXED VERSION
+// Chat login function
 async function loginToChat() {
-    console.log('Enhanced loginToChat called');
     const usernameInput = document.getElementById('chatUsername');
     const passwordInput = document.getElementById('chatPassword');
     const errorDiv = document.getElementById('loginError');
@@ -238,7 +167,7 @@ async function loginToChat() {
     }
     
     try {
-        const response = await fetch(`${API_URL}/api/auth/login`, {
+        const response = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -255,8 +184,6 @@ async function loginToChat() {
         currentUser = data.user;
         localStorage.setItem('authToken', authToken);
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        window.authToken = authToken;
-        window.currentUser = currentUser;
         
         usernameInput.value = '';
         passwordInput.value = '';
@@ -264,20 +191,19 @@ async function loginToChat() {
         
         loadChatInterface();
     } catch (error) {
-        console.error('Enhanced chat login error:', error);
         if (errorDiv) errorDiv.textContent = 'Connection error. Please try again.';
     }
 }
 
-// Update window functions with enhanced versions - but the emergency versions will override these
-// window.navigateToPage = navigateToPage;
-// window.loginAdmin = loginAdmin;
-// window.loginToChat = loginToChat;
+// Update window functions with enhanced versions
+window.navigateToPage = navigateToPage;
+window.loginAdmin = loginAdmin;
+window.loginToChat = loginToChat;
 
 // Track page visits
 async function trackPageVisit(page) {
     try {
-        await fetch(`${API_URL}/api/analytics`, {
+        await fetch(`${API_URL}/analytics`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ page_visited: page, referrer: document.referrer })
@@ -289,7 +215,6 @@ async function trackPageVisit(page) {
 
 // Check chat access
 function checkChatAccess() {
-    console.log('Checking chat access, authToken:', !!authToken);
     if (!authToken) {
         const chatLogin = document.getElementById('chatLogin');
         const chatInterface = document.getElementById('chatInterface');
@@ -302,28 +227,14 @@ function checkChatAccess() {
 
 // Load chat interface
 function loadChatInterface() {
-    console.log('Loading chat interface...');
     const chatLogin = document.getElementById('chatLogin');
     const chatInterface = document.getElementById('chatInterface');
     
     if (chatLogin) chatLogin.style.display = 'none';
-    if (chatInterface) {
-        chatInterface.style.display = 'block';
-        
-        // Initialize chat if function exists
-        if (typeof initializeChat === 'function') {
-            console.log('Initializing chat...');
-            initializeChat();
-        } else {
-            // Fallback: show a basic interface
-            chatInterface.innerHTML = `
-                <div style="padding: 2rem; text-align: center; color: #fff;">
-                    <h3>Chat Interface Loading...</h3>
-                    <p>Welcome, ${currentUser ? currentUser.username : 'User'}!</p>
-                    <p>Chat functionality is being initialized.</p>
-                </div>
-            `;
-        }
+    if (chatInterface) chatInterface.style.display = 'block';
+    
+    if (typeof initializeChat === 'function') {
+        initializeChat();
     }
 }
 
@@ -414,8 +325,6 @@ window.logout = function() {
     localStorage.removeItem('currentUser');
     authToken = null;
     currentUser = null;
-    window.authToken = null;
-    window.currentUser = null;
     
     const adminLogin = document.getElementById('adminLogin');
     const adminInterface = document.getElementById('adminInterface');
@@ -450,8 +359,3 @@ console.log('All functions available:', {
     loginToChat: typeof window.loginToChat,
     logout: typeof window.logout
 });
-
-// Check if user is already logged in on page load
-if (authToken && currentUser) {
-    console.log('Found existing auth token for user:', currentUser.username);
-}
