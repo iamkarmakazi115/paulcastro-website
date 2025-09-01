@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social - Paul Castro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="social-page">
+    <!-- Facebook SDK -->
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" 
+        src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0">
+    </script>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navigation Sidebar -->
+    <nav class="nav-sidebar" id="navSidebar">
+        <div class="nav-logo">
+            <h1>Paul Castro</h1>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link" data-text="Home">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="about.html" class="nav-link" data-text="About Me">
+                    <i class="fas fa-user"></i> About Me
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="works.html" class="nav-link" data-text="My Works">
+                    <i class="fas fa-book"></i> My Works
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a href="social.html" class="nav-link" data-text="Social">
+                    <i class="fas fa-share-alt"></i> Social
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-text="Live Chat" onclick="requestChatAccess()">
+                    <i class="fas fa-comments"></i> Live Chat
+                </a>
+            </li>
+        </ul>
+        <div class="back-home">
+            <a href="index.html" class="nav-link" data-text="← Back to Home">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            <header class="page-header">
+                <h1 class="page-title">Connect & Engage</h1>
+                <p class="page-subtitle">Join the conversation and stay updated on my latest works</p>
+            </header>
+            
+            <div class="social-content">
+                <!-- Social Stats -->
+                <div class="social-stats">
+                    <div class="stat-card">
+                        <i class="fab fa-facebook"></i>
+                        <h3>Facebook</h3>
+                        <p>Follow for updates</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-blog"></i>
+                        <h3>Blog Posts</h3>
+                        <p>Writing insights</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-comments"></i>
+                        <h3>Community</h3>
+                        <p>Join discussions</p>
+                    </div>
+                </div>
+
+                <!-- Main Social Feed Container -->
+                <div class="social-feed-container">
+                    <!-- Facebook Page Plugin -->
+                    <div class="facebook-section">
+                        <h2 class="section-title">
+                            <i class="fab fa-facebook"></i> Latest from Facebook
+                        </h2>
+                        <div class="fb-page-wrapper">
+                            <div class="fb-page" 
+                                data-href="https://www.facebook.com/profile.php?id=61579899121583" 
+                                data-tabs="timeline,events,messages" 
+                                data-width="500" 
+                                data-height="800" 
+                                data-small-header="false" 
+                                data-adapt-container-width="true" 
+                                data-hide-cover="false" 
+                                data-show-facepile="true">
+                                <blockquote cite="https://www.facebook.com/profile.php?id=61579899121583" 
+                                    class="fb-xfbml-parse-ignore">
+                                    <a href="https://www.facebook.com/profile.php?id=61579899121583">
+                                        Paul Castro - Author
+                                    </a>
+                                </blockquote>
+                            </div>
+                        </div>
+                        
+                        <!-- Direct Link to Facebook -->
+                        <div class="social-cta">
+                            <a href="https://www.facebook.com/profile.php?id=61579899121583" 
+                               target="_blank" 
+                               class="facebook-btn">
+                                <i class="fab fa-facebook"></i> Visit My Facebook Page
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Additional Social Content -->
+                    <div class="social-sidebar">
+                        <!-- Quick Updates -->
+                        <div class="updates-card">
+                            <h3><i class="fas fa-bell"></i> Quick Updates</h3>
+                            <div class="update-item">
+                                <span class="update-date">Latest</span>
+                                <p>Working on the final chapters of "Blood Howls"</p>
+                            </div>
+                            <div class="update-item">
+                                <span class="update-date">This Week</span>
+                                <p>New character development for "Forgotten Son"</p>
+                            </div>
+                            <div class="update-item">
+                                <span class="update-date">Coming Soon</span>
+                                <p>Live reading session in the chat room</p>
+                            </div>
+                        </div>
+
+                        <!-- Newsletter Signup -->
+                        <div class="newsletter-card">
+                            <h3><i class="fas fa-envelope"></i> Stay Connected</h3>
+                            <p>Get exclusive updates on my writing journey</p>
+                            <form id="newsletterForm" onsubmit="handleNewsletter(event)">
+                                <input type="email" 
+                                       placeholder="Your email address" 
+                                       id="newsletterEmail" 
+                                       required>
+                                <button type="submit">Subscribe</button>
+                            </form>
+                        </div>
+
+                        <!-- Social Links -->
+                        <div class="social-links-card">
+                            <h3><i class="fas fa-link"></i> Connect</h3>
+                            <div class="social-links">
+                                <a href="https://www.facebook.com/profile.php?id=61579899121583" 
+                                   target="_blank" 
+                                   class="social-link facebook">
+                                    <i class="fab fa-facebook"></i>
+                                </a>
+                                <a href="mailto:paul_castro@karmakazi.org" 
+                                   class="social-link email">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                                <a href="#" 
+                                   onclick="requestChatAccess()" 
+                                   class="social-link chat">
+                                    <i class="fas fa-comments"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Writing Tips -->
+                        <div class="tips-card">
+                            <h3><i class="fas fa-lightbulb"></i> Writing Wisdom</h3>
+                            <blockquote>
+                                "Every character believes they're the hero of their own story. Write them that way, and your villains become unforgettable."
+                            </blockquote>
+                            <p class="tip-author">- Paul Castro</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="contact-section">
+            <a href="tel:3462030833" class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>(346) 203-0833</span>
+            </a>
+            <a href="mailto:paul_castro@karmakazi.org" class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>paul_castro@karmakazi.org</span>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61579899121583" target="_blank" class="contact-item">
+                <i class="fab fa-facebook"></i>
+                <span>Facebook</span>
+            </a>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/social.js"></script>
+</body>
+</html>
+
+<style>
+/* Additional Social Page Styles */
+.social-content {
+    padding-bottom: 100px;
+}
+
+.social-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.social-stats .stat-card {
+    background: rgba(42, 42, 42, 0.6);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.social-stats .stat-card:hover {
+    border-color: var(--primary-red);
+    transform: translateY(-5px);
+    background: rgba(220, 20, 60, 0.1);
+}
+
+.social-stats .stat-card i {
+    font-size: 3rem;
+    color: var(--primary-red);
+    margin-bottom: 1rem;
+}
+
+.social-stats .stat-card h3 {
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.social-stats .stat-card p {
+    color: #888;
+}
+
+.social-feed-container {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+}
+
+.facebook-section {
+    background: rgba(42, 42, 42, 0.6);
+    border-radius: 10px;
+    padding: 2rem;
+}
+
+.section-title {
+    font-family: 'Orbitron', monospace;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.section-title i {
+    color: #1877f2;
+}
+
+.fb-page-wrapper {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+.social-cta {
+    text-align: center;
+}
+
+.facebook-btn {
+    display: inline-block;
+    background: #1877f2;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.facebook-btn:hover {
+    background: #166fe5;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(24, 119, 242, 0.3);
+}
+
+.social-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.updates-card,
+.newsletter-card,
+.social-links-card,
+.tips-card {
+    background: rgba(10, 10, 10, 0.8);
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid var(--secondary-grey);
+}
+
+.updates-card h3,
+.newsletter-card h3,
+.social-links-card h3,
+.tips-card h3 {
+    color: var(--primary-red);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.update-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--secondary-grey);
+}
+
+.update-item:last-child {
+    border-bottom: none;
+}
+
+.update-date {
+    display: inline-block;
+    background: var(--primary-red);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.update-item p {
+    color: var(--text-light);
+    margin-top: 0.5rem;
+}
+
+.newsletter-card p {
+    color: #B0B0B0;
+    margin-bottom: 1rem;
+}
+
+.newsletter-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.newsletter-card input {
+    padding: 0.8rem;
+    background: rgba(42, 42, 42, 0.8);
+    border: 1px solid var(--secondary-grey);
+    color: var(--text-light);
+    border-radius: 5px;
+}
+
+.newsletter-card button {
+    padding: 0.8rem;
+    background: linear-gradient(45deg, var(--primary-red), var(--secondary-grey));
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.newsletter-card button:hover {
+    transform: scale(1.05);
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.social-link {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(42, 42, 42, 0.8);
+    border-radius: 50%;
+    color: var(--text-light);
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.social-link:hover {
+    transform: scale(1.1);
+}
+
+.social-link.facebook:hover {
+    background: #1877f2;
+    color: white;
+}
+
+.social-link.email:hover {
+    background: var(--primary-red);
+    color: white;
+}
+
+.social-link.chat:hover {
+    background: #4CAF50;
+    color: white;
+}
+
+.tips-card blockquote {
+    color: var(--text-light);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--primary-red);
+}
+
+.tip-author {
+    text-align: right;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 968px) {
+    .social-feed-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .social-sidebar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .social-stats {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

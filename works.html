@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Works - Paul Castro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="works-page">
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navigation Sidebar -->
+    <nav class="nav-sidebar" id="navSidebar">
+        <div class="nav-logo">
+            <h1>Paul Castro</h1>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link" data-text="Home">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="about.html" class="nav-link" data-text="About Me">
+                    <i class="fas fa-user"></i> About Me
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a href="works.html" class="nav-link" data-text="My Works">
+                    <i class="fas fa-book"></i> My Works
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="social.html" class="nav-link" data-text="Social">
+                    <i class="fas fa-share-alt"></i> Social
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-text="Live Chat" onclick="requestChatAccess()">
+                    <i class="fas fa-comments"></i> Live Chat
+                </a>
+            </li>
+        </ul>
+        <div class="back-home">
+            <a href="index.html" class="nav-link" data-text="← Back to Home">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            <header class="page-header">
+                <h1 class="page-title">My Literary Works</h1>
+                <p class="page-subtitle">Six Epic Tales in Development</p>
+            </header>
+            
+            <div class="works-content">
+                <div class="books-grid">
+                    <!-- Blood Howls -->
+                    <div class="book-card" data-book="blood-howls">
+                        <div class="book-header">
+                            <h2 class="book-title">Blood Howls</h2>
+                            <span class="book-status">In Development</span>
+                        </div>
+                        <p class="book-tagline">When ancient blood awakens, the hunt begins.</p>
+                        <div class="book-description">
+                            <p>
+                                Kael Thorne's twenty-fifth birthday was supposed to be ordinary—dinner with family, maybe a call from his sister. Instead, it becomes the night his parents die and a supernatural assassin called the Hunter comes to claim what flows in his veins.
+                            </p>
+                            <p>
+                                Kael is the last descendant of the Progenitor, the first werewolf, and his blood is the key to an ancient relic that could either save the world or destroy it. Thrust into a war between supernatural races, he must forge unlikely alliances with exiled Fae warriors, battle-scarred trolls, storm-wielding djinn, and vengeful banshees—all while learning to master the beast within.
+                            </p>
+                            <p>
+                                As genetically twisted monstrosities ravage cities and the mad tyrant Valek Dorne builds an army of horrors, Kael faces an impossible choice: embrace the very power that makes him a target, or watch everything he loves burn.
+                            </p>
+                            <p class="book-themes">
+                                <strong>Alpha. Warrior. Legend.</strong> A dark urban fantasy that blends supernatural politics, visceral action, and the timeless struggle between vengeance and justice.
+                            </p>
+                        </div>
+                        <button class="expand-btn" onclick="toggleBookDetails('blood-howls')">
+                            <i class="fas fa-chevron-down"></i> Read More
+                        </button>
+                    </div>
+
+                    <!-- Forgotten Son -->
+                    <div class="book-card" data-book="forgotten-son">
+                        <div class="book-header">
+                            <h2 class="book-title">Forgotten Son</h2>
+                            <span class="book-status">In Development</span>
+                        </div>
+                        <p class="book-tagline">When the dead whisper warnings, a god's son must choose between love and cosmic order.</p>
+                        <div class="book-description">
+                            <p>
+                                Christos Thanatos has spent twenty-six years hiding in plain sight—working security jobs, living in a Chicago high-rise, and pretending the voices of the dead are just background noise. The son of Hades should be ruling the underworld, but he's chosen the mortal world instead, finding peace in the arms of Elena Martinez, an art history student who sees past his supernatural nature.
+                            </p>
+                            <p>
+                                Then Elena is kidnapped. The ransom isn't money—it's blood. Five divine bloodlines must die to fuel an ancient ritual that will birth a god without conscience, without love, without the weaknesses that make divinity worth worshipping.
+                            </p>
+                            <p>
+                                As Chicago burns with divine fire and Titans descend from storm-torn skies, Christos discovers his father's true plan: not just to create the perfect god, but to tear down the masquerade that has kept supernatural and human worlds separate for centuries.
+                            </p>
+                            <p class="book-themes">
+                                An urban fantasy that explores what happens when ancient powers clash with modern love, when family loyalty wars with moral conviction, and when the greatest divine act might be choosing to serve rather than rule.
+                            </p>
+                        </div>
+                        <button class="expand-btn" onclick="toggleBookDetails('forgotten-son')">
+                            <i class="fas fa-chevron-down"></i> Read More
+                        </button>
+                    </div>
+
+                    <!-- Out of Time -->
+                    <div class="book-card" data-book="out-of-time">
+                        <div class="book-header">
+                            <h2 class="book-title">Out of Time</h2>
+                            <span class="book-status">In Development</span>
+                        </div>
+                        <p class="book-tagline">When a prince is murdered and hung like a scarecrow, the killer leaves behind more than a corpse—they leave a name that shouldn't exist.</p>
+                        <div class="book-description">
+                            <p>
+                                Cael Ward Corbin has spent years hiding what he is: a memory-binder caught between the Seelie and Unseelie Courts, hunting rogues in the shadows of the Interworld Accord. When Prince Alarion is found crucified in a human town square, carved with the forbidden sigil of the long-dead Outriders, Cael's investigation unearths a conspiracy that reaches into the heart of his own buried past.
+                            </p>
+                            <p>
+                                Partnered with Vaelira Elaren, a Court agent whose loyalties run deeper than her blade, Cael follows a trail of royal blood and stolen names across the Feywild's most dangerous territories. But the killer isn't just rewriting the future. They're unmaking the past, using forbidden shadowglass magic to steal identities and forge Mirrorborn assassins.
+                            </p>
+                            <p>
+                                When Cael discovers his own name carved in blood at a crime scene, he realizes he's not hunting the conspiracy—he's part of it.
+                            </p>
+                            <p class="book-themes">
+                                An urban fantasy that weaves Fae politics with identity horror, where the greatest magic is choosing who you are when the world insists you're someone else.
+                            </p>
+                        </div>
+                        <button class="expand-btn" onclick="toggleBookDetails('out-of-time')">
+                            <i class="fas fa-chevron-down"></i> Read More
+                        </button>
+                    </div>
+
+                    <!-- Which Way the Wind Blows -->
+                    <div class="book-card" data-book="wind-blows">
+                        <div class="book-header">
+                            <h2 class="book-title">Which Way the Wind Blows</h2>
+                            <span class="book-status">In Development</span>
+                        </div>
+                        <p class="book-tagline">In the shadows between light and darkness, a bastard prince must choose his crown.</p>
+                        <div class="book-description">
+                            <p>
+                                When Veraden—son of the ruthless Queen Mab—rescues the tortured Lord Calendreth from an Unseelie dungeon, he triggers a war that will shatter the ancient balance between the Seelie and Unseelie courts. Raised in secret by a shapeshifting Glamourling, Veraden has spent decades infiltrating his mother's forces, but his rescue mission sets in motion a chain of betrayals, bloodshed, and broken oaths.
+                            </p>
+                            <p>
+                                As Queen Titania of the Seelie Court watches her kingdom burn and her beloved King Oberon fall to Mab's devastating magic, she must forge an unlikely alliance with the shadow-born warrior who carries her enemy's blood. Alongside the fierce commander Elanai Vire, Veraden leads a desperate resistance from the ashes of the fallen court.
+                            </p>
+                            <p>
+                                But Queen Mab's hunger for vengeance runs deeper than mere conquest. Haunted by ancient betrayals and the sister who once stole her crown, she will stop at nothing to reclaim what was taken—even if it means destroying the son she abandoned and the world itself.
+                            </p>
+                            <p class="book-themes">
+                                A dark fantasy epic of family, betrayal, and the terrible price of power, where love blooms in the ruins of war and the greatest enemy may be the blood that runs in your veins.
+                            </p>
+                        </div>
+                        <button class="expand-btn" onclick="toggleBookDetails('wind-blows')">
+                            <i class="fas fa-chevron-down"></i> Read More
+                        </button>
+                    </div>
+
+                    <!-- The Descent Book 1 -->
+                    <div class="book-card" data-book="descent-1">
+                        <div class="book-header">
+                            <h2 class="book-title">The Descent</h2>
+                            <span class="book-status">Book 1 - In Development</span>
+                        </div>
+                        <p class="book-tagline">Born from fire and hidden in shadow, Lucien Graves never knew he was heir to a throne built on blood and betrayal.</p>
+                        <div class="book-description">
+                            <p>
+                                Bartending in the vampire-owned clubs of Kharvas, Lucien lives quietly among the supernatural elite—until ancient relics begin awakening in his presence and demons start hunting him through the neon-lit streets. When he discovers his true identity as the son of murdered vampire royalty, he's thrust into a war that has been brewing since the fall of the old kingdom.
+                            </p>
+                            <p>
+                                With the primordial demon Az'kaar stirring from his prison and vampire covens fracturing under the weight of corruption, Lucien must master elemental powers he never wanted while navigating deadly alliances with exiled nobles, assassins, and the mysterious Amaris—who has been protecting him from the shadows for years.
+                            </p>
+                            <p>
+                                From underground fight clubs to burning sanctums, from forgotten crypts to demon citadels carved from living stone, The Descent weaves a dark tapestry of urban fantasy and epic mythology.
+                            </p>
+                            <p class="book-themes">
+                                <strong>The fire remembers. The wolves are waking.</strong> And the descent into power comes at the price of everything you thought you knew about yourself.
+                            </p>
+                        </div>
+                        <button class="expand-btn" onclick="toggleBookDetails('descent-1')">
+                            <i class="fas fa-chevron-down"></i> Read More
+                        </button>
+                    </div>
+
+                    <!-- The Descent: Ash Reborn Book 2 -->
+                    <div class="book-card" data-book="descent-2">
+                        <div class="book-header">
+                            <h2 class="book-title">The Descent: Ash Reborn</h2>
+                            <span class="book-status">Book 2 - In Development</span>
+                        </div>
+                        <p class="book-tagline">The fire within him was never meant to be carried by the living.</p>
+                        <div class="book-description">
+                            <p>
+                                Lucien Thorne awakens to a terrible truth—he died, and the Sixth Relic brought him back. Now, as the Council's final weapons emerge from shadow, he must confront not only their Hollow Ascendant and reality-warping Choir, but the growing realization that he is no longer merely a relic-bearer. He is a living artifact himself.
+                            </p>
+                            <p>
+                                Haunted by visions of a burning cradle and guided by fragments of his fallen sister Seraphine's memories, Lucien leads the Ash Rebellion through a landscape where time fractures and gods bleed into tomorrow. Alongside the fierce Amaris, the dreamwalker Ciryel, and the stalwart Kaemul, he must gather the scattered remnants of resistance.
+                            </p>
+                            <p>
+                                From the Bone Archive's buried confessions to the mountain where the First Flame was born, from the city that was never supposed to exist to the choir that sang the sun to sleep, Lucien will discover that some victories require not the wielding of power, but the wisdom to let it go.
+                            </p>
+                            <p class="book-themes">
+                                The explosive conclusion to The Descent duology, where the cost of memory meets the price of freedom, and a man who died for the flame must choose whether to burn as a weapon or shine as a light.
+                            </p>
+                        </div>
+                        <button class="expand-btn" onclick="toggleBookDetails('descent-2')">
+                            <i class="fas fa-chevron-down"></i> Read More
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="contact-section">
+            <a href="tel:3462030833" class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>(346) 203-0833</span>
+            </a>
+            <a href="mailto:paul_castro@karmakazi.org" class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>paul_castro@karmakazi.org</span>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61579899121583" target="_blank" class="contact-item">
+                <i class="fab fa-facebook"></i>
+                <span>Facebook</span>
+            </a>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/works.js"></script>
+</body>
+</html>
+
+<style>
+/* Additional Works Page Styles */
+.page-subtitle {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 1.2rem;
+    margin-top: -1rem;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+.works-content {
+    padding-bottom: 100px;
+}
+
+.book-card {
+    background: rgba(42, 42, 42, 0.6);
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 2px solid transparent;
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.book-card:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent, rgba(220, 20, 60, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.book-card:hover:before {
+    opacity: 1;
+}
+
+.book-card:hover {
+    border-color: var(--primary-red);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(220, 20, 60, 0.2);
+}
+
+.book-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.book-status {
+    background: linear-gradient(45deg, var(--primary-red), var(--secondary-grey));
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.book-description {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.5s ease;
+    padding: 0;
+}
+
+.book-description.expanded {
+    max-height: 1000px;
+    padding: 1rem 0;
+}
+
+.book-description p {
+    color: #B0B0B0;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    text-align: justify;
+}
+
+.book-themes {
+    color: var(--text-light) !important;
+    font-style: italic;
+    border-top: 1px solid var(--secondary-grey);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.expand-btn {
+    background: transparent;
+    color: var(--primary-red);
+    border: 1px solid var(--primary-red);
+    padding: 0.5rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.expand-btn:hover {
+    background: var(--primary-red);
+    color: white;
+    transform: scale(1.05);
+}
+
+.expand-btn i {
+    transition: transform 0.3s ease;
+}
+
+.expand-btn.expanded i {
+    transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+    .book-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+</style>
