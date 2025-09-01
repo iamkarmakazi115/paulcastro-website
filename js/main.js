@@ -54,7 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
     checkAdminAccess();
     
     // Initialize page
-    loadBooks();
+    if (typeof loadBooks === 'function') {
+        loadBooks();
+    }
 });
 
 // Track page visits for analytics
@@ -78,8 +80,10 @@ async function trackPageVisit(page) {
 // Check if user has chat access
 function checkChatAccess() {
     if (!authToken) {
-        document.getElementById('chatLogin').style.display = 'block';
-        document.getElementById('chatInterface').style.display = 'none';
+        const chatLogin = document.getElementById('chatLogin');
+        const chatInterface = document.getElementById('chatInterface');
+        if (chatLogin) chatLogin.style.display = 'block';
+        if (chatInterface) chatInterface.style.display = 'none';
     } else {
         loadChatInterface();
     }
@@ -92,7 +96,7 @@ async function loginToChat() {
     const errorDiv = document.getElementById('loginError');
     
     if (!username || !password) {
-        errorDiv.textContent = 'Please enter both username and password';
+        if (errorDiv) errorDiv.textContent = 'Please enter both username and password';
         return;
     }
     
@@ -107,7 +111,7 @@ async function loginToChat() {
         
         if (!response.ok) {
             const error = await response.json();
-            errorDiv.textContent = error.error || 'Login failed';
+            if (errorDiv) errorDiv.textContent = error.error || 'Login failed';
             return;
         }
         
@@ -120,20 +124,23 @@ async function loginToChat() {
         // Clear form
         document.getElementById('chatUsername').value = '';
         document.getElementById('chatPassword').value = '';
-        errorDiv.textContent = '';
+        if (errorDiv) errorDiv.textContent = '';
         
         // Load chat interface
         loadChatInterface();
     } catch (error) {
         console.error('Login error:', error);
-        errorDiv.textContent = 'Connection error. Please try again.';
+        if (errorDiv) errorDiv.textContent = 'Connection error. Please try again.';
     }
 }
 
 // Load chat interface after successful login
 function loadChatInterface() {
-    document.getElementById('chatLogin').style.display = 'none';
-    document.getElementById('chatInterface').style.display = 'block';
+    const chatLogin = document.getElementById('chatLogin');
+    const chatInterface = document.getElementById('chatInterface');
+    
+    if (chatLogin) chatLogin.style.display = 'none';
+    if (chatInterface) chatInterface.style.display = 'block';
     
     // Load the chat component
     if (typeof initializeChat === 'function') {
@@ -150,17 +157,19 @@ function checkAdminAccess() {
         // Add admin navigation item if not present
         if (!document.querySelector('[data-page="admin"]')) {
             const navContainer = document.querySelector('.nav-container');
-            const adminNav = document.createElement('div');
-            adminNav.className = 'nav-item';
-            adminNav.setAttribute('data-page', 'admin');
-            adminNav.innerHTML = '<span class="nav-text">Admin</span>';
-            adminNav.addEventListener('click', () => {
-                navigateToPage('admin');
-            });
-            navContainer.appendChild(adminNav);
-            
-            // Create admin page
-            createAdminPage();
+            if (navContainer) {
+                const adminNav = document.createElement('div');
+                adminNav.className = 'nav-item';
+                adminNav.setAttribute('data-page', 'admin');
+                adminNav.innerHTML = '<span class="nav-text">Admin</span>';
+                adminNav.addEventListener('click', () => {
+                    navigateToPage('admin');
+                });
+                navContainer.appendChild(adminNav);
+                
+                // Create admin page
+                createAdminPage();
+            }
         }
     }
 }
@@ -168,6 +177,8 @@ function checkAdminAccess() {
 // Create admin page dynamically
 function createAdminPage() {
     const content = document.querySelector('.content');
+    if (!content) return;
+    
     const adminSection = document.createElement('section');
     adminSection.id = 'admin';
     adminSection.className = 'page';
@@ -195,12 +206,20 @@ function createAdminPage() {
 
 // Admin login
 async function loginAdmin() {
-    const username = document.getElementById('adminUsername').value;
-    const password = document.getElementById('adminPassword').value;
+    const usernameInput = document.getElementById('adminUsername');
+    const passwordInput = document.getElementById('adminPassword');
     const errorDiv = document.getElementById('adminLoginError');
     
+    if (!usernameInput || !passwordInput) {
+        if (errorDiv) errorDiv.textContent = 'Login form not found';
+        return;
+    }
+    
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+    
     if (username !== 'JohnC' || password !== 'Gantz115!') {
-        errorDiv.textContent = 'Invalid admin credentials';
+        if (errorDiv) errorDiv.textContent = 'Invalid admin credentials';
         return;
     }
     
@@ -214,14 +233,14 @@ async function loginAdmin() {
         });
         
         if (!response.ok) {
-            errorDiv.textContent = 'Authentication failed';
+            if (errorDiv) errorDiv.textContent = 'Authentication failed';
             return;
         }
         
         const data = await response.json();
         
-        if (data.user.role !== 'admin') {
-            errorDiv.textContent = 'Admin access required';
+        if (data.user && data.user.role !== 'admin') {
+            if (errorDiv) errorDiv.textContent = 'Admin access required';
             return;
         }
         
@@ -234,14 +253,18 @@ async function loginAdmin() {
         loadAdminInterface();
     } catch (error) {
         console.error('Admin login error:', error);
-        errorDiv.textContent = 'Connection error';
+        if (errorDiv) errorDiv.textContent = 'Connection error';
     }
 }
 
 // Load admin interface
 async function loadAdminInterface() {
-    document.getElementById('adminLogin').style.display = 'none';
+    const adminLogin = document.getElementById('adminLogin');
     const adminInterface = document.getElementById('adminInterface');
+    
+    if (adminLogin) adminLogin.style.display = 'none';
+    if (!adminInterface) return;
+    
     adminInterface.style.display = 'block';
     
     adminInterface.innerHTML = `
@@ -259,6 +282,13 @@ async function loadAdminInterface() {
                 <h3>Blocked List</h3>
                 <div id="blockedList"></div>
             </div>
+            <div class="admin-section">
+                <h3>System Status</h3>
+                <div id="systemStatus">
+                    <p>API Status: <span class="status-indicator">Connected</span></p>
+                    <p>Users Online: <span id="onlineCount">0</span></p>
+                </div>
+            </div>
         </div>
     `;
     
@@ -270,6 +300,9 @@ async function loadAdminInterface() {
 
 // Load users for admin
 async function loadUsers() {
+    const usersList = document.getElementById('usersList');
+    if (!usersList) return;
+    
     try {
         const response = await fetch(`${API_URL}/users`, {
             headers: {
@@ -277,10 +310,12 @@ async function loadUsers() {
             }
         });
         
-        if (!response.ok) return;
+        if (!response.ok) {
+            usersList.innerHTML = '<p>Error loading users</p>';
+            return;
+        }
         
         const users = await response.json();
-        const usersList = document.getElementById('usersList');
         
         usersList.innerHTML = users.map(user => `
             <div class="admin-item">
@@ -291,8 +326,201 @@ async function loadUsers() {
         `).join('');
     } catch (error) {
         console.error('Error loading users:', error);
+        if (usersList) usersList.innerHTML = '<p>Connection error</p>';
     }
 }
 
 // Load rooms for admin
 async function loadRooms() {
+    const roomsList = document.getElementById('roomsList');
+    if (!roomsList) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/rooms`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        
+        if (!response.ok) {
+            roomsList.innerHTML = '<p>Error loading rooms</p>';
+            return;
+        }
+        
+        const rooms = await response.json();
+        
+        roomsList.innerHTML = rooms.map(room => `
+            <div class="admin-item">
+                <span>Room: ${room.name}</span>
+                <span>Users: ${room.user_count}</span>
+                <span>Created: ${new Date(room.created_at).toLocaleString()}</span>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Error loading rooms:', error);
+        if (roomsList) roomsList.innerHTML = '<p>Connection error</p>';
+    }
+}
+
+// Load blocked list for admin
+async function loadBlockedList() {
+    const blockedList = document.getElementById('blockedList');
+    if (!blockedList) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/blocked`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        
+        if (!response.ok) {
+            blockedList.innerHTML = '<p>Error loading blocked list</p>';
+            return;
+        }
+        
+        const blocked = await response.json();
+        
+        blockedList.innerHTML = blocked.map(item => `
+            <div class="admin-item">
+                <span>User: ${item.username}</span>
+                <span>Reason: ${item.reason}</span>
+                <span>Blocked: ${new Date(item.blocked_at).toLocaleString()}</span>
+                <button onclick="unblockUser(${item.id})">Unblock</button>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Error loading blocked list:', error);
+        if (blockedList) blockedList.innerHTML = '<p>Connection error</p>';
+    }
+}
+
+// Show add user form
+function showAddUserForm() {
+    const usersList = document.getElementById('usersList');
+    if (!usersList) return;
+    
+    const formHTML = `
+        <div class="add-user-form">
+            <h4>Add New User</h4>
+            <input type="text" id="newUsername" placeholder="Username">
+            <input type="email" id="newEmail" placeholder="Email">
+            <input type="password" id="newPassword" placeholder="Password">
+            <select id="newRole">
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+            <button onclick="addUser()">Add User</button>
+            <button onclick="cancelAddUser()">Cancel</button>
+        </div>
+    `;
+    
+    usersList.insertAdjacentHTML('afterbegin', formHTML);
+}
+
+// Add new user
+async function addUser() {
+    const username = document.getElementById('newUsername').value;
+    const email = document.getElementById('newEmail').value;
+    const password = document.getElementById('newPassword').value;
+    const role = document.getElementById('newRole').value;
+    
+    if (!username || !password) {
+        alert('Username and password are required');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_URL}/users`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({ username, email, password, role })
+        });
+        
+        if (!response.ok) {
+            const error = await response.json();
+            alert(error.error || 'Failed to add user');
+            return;
+        }
+        
+        // Refresh users list
+        loadUsers();
+    } catch (error) {
+        console.error('Error adding user:', error);
+        alert('Connection error');
+    }
+}
+
+// Cancel add user
+function cancelAddUser() {
+    const form = document.querySelector('.add-user-form');
+    if (form) form.remove();
+}
+
+// Unblock user
+async function unblockUser(id) {
+    try {
+        const response = await fetch(`${API_URL}/blocked/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        
+        if (!response.ok) {
+            alert('Failed to unblock user');
+            return;
+        }
+        
+        // Refresh blocked list
+        loadBlockedList();
+    } catch (error) {
+        console.error('Error unblocking user:', error);
+        alert('Connection error');
+    }
+}
+
+// Logout function
+function logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
+    authToken = null;
+    currentUser = null;
+    
+    // Redirect to home page
+    if (typeof navigateToPage === 'function') {
+        navigateToPage('home');
+    }
+    
+    // Reset login forms
+    const chatLogin = document.getElementById('chatLogin');
+    const chatInterface = document.getElementById('chatInterface');
+    const adminLogin = document.getElementById('adminLogin');
+    const adminInterface = document.getElementById('adminInterface');
+    
+    if (chatLogin) chatLogin.style.display = 'block';
+    if (chatInterface) chatInterface.style.display = 'none';
+    if (adminLogin) adminLogin.style.display = 'block';
+    if (adminInterface) adminInterface.style.display = 'none';
+}
+
+// Error handling for undefined functions
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    console.error('JavaScript Error:', {
+        message: msg,
+        source: url,
+        line: lineNo,
+        column: columnNo,
+        error: error
+    });
+    return false;
+};
+
+// Make functions globally available
+window.navigateToPage = navigateToPage;
+window.loginAdmin = loginAdmin;
+window.loginToChat = loginToChat;
+window.logout = logout;
