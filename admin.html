@@ -37,7 +37,7 @@
         }
 
         .admin-content {
-            max-width: 500px;
+            max-width: 1200px;
             width: 100%;
         }
 
@@ -64,6 +64,8 @@
             border-radius: 15px;
             padding: 2.5rem;
             border: 1px solid rgba(220, 20, 60, 0.2);
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .login-form h3 {
@@ -114,9 +116,14 @@
             transition: all 0.3s ease;
         }
 
-        .login-btn:hover {
+        .login-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(220, 20, 60, 0.4);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .error-message {
@@ -131,30 +138,6 @@
             text-align: center;
             margin-top: 1rem;
             font-size: 0.9rem;
-        }
-
-        .debug-info {
-            margin-top: 2rem;
-            padding: 1rem;
-            background: rgba(51, 51, 51, 0.3);
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: rgba(224, 224, 224, 0.6);
-        }
-
-        .auto-fill-btn {
-            margin-top: 0.5rem;
-            padding: 0.5rem;
-            background: rgba(220, 20, 60, 0.3);
-            border: 1px solid rgba(220, 20, 60, 0.5);
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .auto-fill-btn:hover {
-            background: rgba(220, 20, 60, 0.5);
         }
 
         .back-link {
@@ -177,28 +160,29 @@
 
         .admin-interface {
             display: none;
+        }
+
+        .admin-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .admin-section {
             background: rgba(26, 26, 26, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 2rem;
             border: 1px solid rgba(220, 20, 60, 0.2);
-            margin-top: 2rem;
-        }
-
-        .admin-section {
-            margin-bottom: 2rem;
-            padding: 1rem;
-            background: rgba(51, 51, 51, 0.4);
-            border-radius: 8px;
         }
 
         .admin-section h3 {
             color: var(--accent);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             font-family: 'Orbitron', monospace;
         }
 
-        .logout-btn {
+        .logout-btn, .action-btn {
             padding: 0.5rem 1rem;
             background: rgba(220, 20, 60, 0.3);
             color: white;
@@ -206,10 +190,117 @@
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .logout-btn:hover {
+        .logout-btn:hover, .action-btn:hover {
             background: rgba(220, 20, 60, 0.5);
+        }
+
+        .user-list, .room-list, .blocked-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .list-item {
+            background: rgba(51, 51, 51, 0.4);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item:hover {
+            background: rgba(51, 51, 51, 0.6);
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        .status-active {
+            background: rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+        }
+
+        .status-inactive {
+            background: rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            background: rgba(10, 10, 10, 0.6);
+            border: 1px solid rgba(220, 20, 60, 0.3);
+            border-radius: 4px;
+            color: var(--text-light);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(220, 20, 60, 0.3);
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--text-light);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--accent);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         @media (max-width: 768px) {
@@ -221,8 +312,8 @@
                 font-size: 2rem;
             }
             
-            .login-form {
-                padding: 1.5rem;
+            .admin-dashboard {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -248,36 +339,98 @@
                     <button class="login-btn" onclick="loginAdmin()" id="loginButton">Login as Admin</button>
                     <div class="error-message" id="adminLoginError"></div>
                     <div class="success-message" id="adminLoginSuccess"></div>
-                    
-                    <div class="debug-info">
-                        <strong>Debug Info:</strong><br>
-                        Expected Username: JohnC<br>
-                        Expected Password: Gantz115!<br>
-                        <button onclick="fillCredentials()" class="auto-fill-btn">Auto-fill Credentials</button>
-                    </div>
                 </div>
             </div>
             
             <div class="admin-interface" id="adminInterface">
-                <div class="admin-section">
-                    <h3>Welcome, Admin!</h3>
-                    <p>Successfully logged in as admin.</p>
-                    <p id="adminUserInfo"></p>
-                    <p id="adminLoginTime"></p>
-                    <button onclick="logout()" class="logout-btn">Logout</button>
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard</button>
+                    <button class="tab-btn" onclick="switchTab('users')">Users</button>
+                    <button class="tab-btn" onclick="switchTab('rooms')">Chat Rooms</button>
+                    <button class="tab-btn" onclick="switchTab('blocked')">Blocked List</button>
                 </div>
-                
-                <div class="admin-section">
-                    <h3>System Status</h3>
-                    <p>Admin Panel: <span style="color: #4caf50;">Active</span></p>
-                    <p>Authentication: <span style="color: #4caf50;">Verified</span></p>
-                    <p>Current Time: <span id="currentTime"></span></p>
+
+                <!-- Dashboard Tab -->
+                <div id="dashboard-tab" class="tab-content active">
+                    <div class="admin-dashboard">
+                        <div class="admin-section">
+                            <h3>Welcome, Admin!</h3>
+                            <p>Successfully logged in as admin.</p>
+                            <p id="adminUserInfo"></p>
+                            <p id="adminLoginTime"></p>
+                            <button onclick="logout()" class="logout-btn">Logout</button>
+                        </div>
+                        
+                        <div class="admin-section">
+                            <h3>System Status</h3>
+                            <p>API Status: <span id="apiStatus" style="color: #ff6b6b;">Checking...</span></p>
+                            <p>Total Users: <span id="totalUsers">0</span></p>
+                            <p>Active Rooms: <span id="activeRooms">0</span></p>
+                            <p>Current Time: <span id="currentTime"></span></p>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="admin-section">
-                    <h3>Management Features</h3>
-                    <p>User management and system controls would be available here when connected to your API server.</p>
-                    <p>API Endpoint: https://api.karmakazi.org/api</p>
+
+                <!-- Users Tab -->
+                <div id="users-tab" class="tab-content">
+                    <div class="admin-section">
+                        <h3>User Management</h3>
+                        <button class="action-btn" onclick="showAddUserForm()">Add New User</button>
+                        <button class="action-btn" onclick="loadUsers()">Refresh</button>
+                        
+                        <div id="addUserForm" style="display: none; margin-top: 1rem;">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" id="newUsername" placeholder="Enter username">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" id="newPassword" placeholder="Enter password">
+                            </div>
+                            <div class="form-group">
+                                <label>Email (optional)</label>
+                                <input type="email" id="newEmail" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select id="newRole">
+                                    <option value="viewer">Viewer</option>
+                                    <option value="host">Host</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                            <button class="action-btn" onclick="addUser()">Create User</button>
+                            <button class="action-btn" onclick="hideAddUserForm()">Cancel</button>
+                        </div>
+                        
+                        <div class="user-list" id="userList" style="margin-top: 1rem;">
+                            <!-- Users will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rooms Tab -->
+                <div id="rooms-tab" class="tab-content">
+                    <div class="admin-section">
+                        <h3>Chat Room Management</h3>
+                        <button class="action-btn" onclick="loadRooms()">Refresh</button>
+                        
+                        <div class="room-list" id="roomList" style="margin-top: 1rem;">
+                            <!-- Rooms will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blocked Tab -->
+                <div id="blocked-tab" class="tab-content">
+                    <div class="admin-section">
+                        <h3>Blocked Users & IPs</h3>
+                        <button class="action-btn" onclick="loadBlocked()">Refresh</button>
+                        
+                        <div class="blocked-list" id="blockedList" style="margin-top: 1rem;">
+                            <!-- Blocked list will be loaded here -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -289,49 +442,74 @@
         // Global variables
         let authToken = null;
         let currentUser = null;
+        const API_URL = 'https://api.karmakazi.org';
 
-        // Auto-fill credentials function
-        function fillCredentials() {
-            document.getElementById('adminUsername').value = 'JohnC';
-            document.getElementById('adminPassword').value = 'Gantz115!';
-            console.log('Credentials auto-filled');
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+
+            // Load data for the tab
+            if (tabName === 'users') loadUsers();
+            if (tabName === 'rooms') loadRooms();
+            if (tabName === 'blocked') loadBlocked();
         }
 
-        // Login function
-        function loginAdmin() {
+        // Login function - Now connects to real API
+        async function loginAdmin() {
             console.log('Admin login attempt');
             
             const usernameInput = document.getElementById('adminUsername');
             const passwordInput = document.getElementById('adminPassword');
             const errorDiv = document.getElementById('adminLoginError');
             const successDiv = document.getElementById('adminLoginSuccess');
+            const loginButton = document.getElementById('loginButton');
             
             // Clear previous messages
             errorDiv.textContent = '';
             successDiv.textContent = '';
             
-            if (!usernameInput || !passwordInput) {
-                errorDiv.textContent = 'Login form elements not found';
-                return;
-            }
-            
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
-            
-            console.log('Login attempt for username:', username);
             
             if (!username || !password) {
                 errorDiv.textContent = 'Please enter both username and password';
                 return;
             }
             
-            // Check hardcoded credentials
-            if (username === 'JohnC' && password === 'Gantz115!') {
-                console.log('Admin login successful');
+            // Disable button during login
+            loginButton.disabled = true;
+            loginButton.textContent = 'Logging in...';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
                 
-                // Set admin data
-                authToken = 'mock-admin-token-' + Date.now();
-                currentUser = { username: 'JohnC', role: 'admin', id: 1 };
+                if (!response.ok) {
+                    const error = await response.json();
+                    errorDiv.textContent = error.error || 'Invalid credentials';
+                    loginButton.disabled = false;
+                    loginButton.textContent = 'Login as Admin';
+                    return;
+                }
+                
+                const data = await response.json();
+                authToken = data.token;
+                currentUser = data.user;
                 
                 // Store in localStorage
                 localStorage.setItem('authToken', authToken);
@@ -349,16 +527,16 @@
                     loadAdminInterface();
                 }, 1000);
                 
-                return;
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = 'Connection error. Please check if the API server is running.';
+                loginButton.disabled = false;
+                loginButton.textContent = 'Login as Admin';
             }
-            
-            // Invalid credentials
-            errorDiv.textContent = 'Invalid admin credentials. Please check username and password.';
-            console.log('Invalid credentials provided');
         }
 
         // Load admin interface
-        function loadAdminInterface() {
+        async function loadAdminInterface() {
             console.log('Loading admin interface...');
             
             const adminLogin = document.getElementById('adminLogin');
@@ -366,12 +544,10 @@
             
             if (adminLogin) {
                 adminLogin.style.display = 'none';
-                console.log('Admin login form hidden');
             }
             
             if (adminInterface) {
                 adminInterface.style.display = 'block';
-                console.log('Admin interface shown');
                 
                 // Update admin info
                 const userInfo = document.getElementById('adminUserInfo');
@@ -388,8 +564,263 @@
                 // Start time update
                 updateTime();
                 setInterval(updateTime, 1000);
-            } else {
-                console.error('Admin interface element not found');
+                
+                // Check API status
+                checkAPIStatus();
+                
+                // Load initial data
+                loadDashboardStats();
+            }
+        }
+
+        // Check API status
+        async function checkAPIStatus() {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                if (response.ok) {
+                    document.getElementById('apiStatus').textContent = 'Online';
+                    document.getElementById('apiStatus').style.color = '#4caf50';
+                } else {
+                    document.getElementById('apiStatus').textContent = 'Error';
+                    document.getElementById('apiStatus').style.color = '#ff6b6b';
+                }
+            } catch (error) {
+                document.getElementById('apiStatus').textContent = 'Offline';
+                document.getElementById('apiStatus').style.color = '#ff6b6b';
+            }
+        }
+
+        // Load dashboard statistics
+        async function loadDashboardStats() {
+            try {
+                // Load users count
+                const usersResponse = await fetch(`${API_URL}/api/users`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                if (usersResponse.ok) {
+                    const users = await usersResponse.json();
+                    document.getElementById('totalUsers').textContent = users.length;
+                }
+
+                // Load rooms count
+                const roomsResponse = await fetch(`${API_URL}/api/rooms`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                if (roomsResponse.ok) {
+                    const rooms = await roomsResponse.json();
+                    document.getElementById('activeRooms').textContent = rooms.length;
+                }
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+            }
+        }
+
+        // Load users
+        async function loadUsers() {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '<p>Loading users...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/users`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    userList.innerHTML = '<p>Error loading users</p>';
+                    return;
+                }
+                
+                const users = await response.json();
+                
+                if (users.length === 0) {
+                    userList.innerHTML = '<p>No users found</p>';
+                    return;
+                }
+                
+                userList.innerHTML = users.map(user => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <strong>${user.username}</strong>
+                            <span class="status-badge ${user.is_active ? 'status-active' : 'status-inactive'}">
+                                ${user.is_active ? 'Active' : 'Inactive'}
+                            </span><br>
+                            <small>Role: ${user.role} | Created: ${new Date(user.created_at).toLocaleDateString()}</small>
+                            ${user.last_login ? `<br><small>Last login: ${new Date(user.last_login).toLocaleString()}</small>` : ''}
+                        </div>
+                        <div class="item-actions">
+                            ${user.username !== 'JohnC' ? `<button class="action-btn" onclick="deleteUser(${user.id})">Delete</button>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading users:', error);
+                userList.innerHTML = '<p>Error loading users</p>';
+            }
+        }
+
+        // Show add user form
+        function showAddUserForm() {
+            document.getElementById('addUserForm').style.display = 'block';
+        }
+
+        // Hide add user form
+        function hideAddUserForm() {
+            document.getElementById('addUserForm').style.display = 'none';
+            document.getElementById('newUsername').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('newEmail').value = '';
+            document.getElementById('newRole').value = 'viewer';
+        }
+
+        // Add new user
+        async function addUser() {
+            const username = document.getElementById('newUsername').value.trim();
+            const password = document.getElementById('newPassword').value.trim();
+            const email = document.getElementById('newEmail').value.trim();
+            const role = document.getElementById('newRole').value;
+            
+            if (!username || !password) {
+                alert('Username and password are required');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/api/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ username, password, email, role })
+                });
+                
+                if (response.ok) {
+                    alert('User created successfully');
+                    hideAddUserForm();
+                    loadUsers();
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Failed to create user');
+                }
+            } catch (error) {
+                console.error('Error creating user:', error);
+                alert('Failed to create user');
+            }
+        }
+
+        // Load rooms
+        async function loadRooms() {
+            const roomList = document.getElementById('roomList');
+            roomList.innerHTML = '<p>Loading rooms...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/rooms`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    roomList.innerHTML = '<p>Error loading rooms</p>';
+                    return;
+                }
+                
+                const rooms = await response.json();
+                
+                if (rooms.length === 0) {
+                    roomList.innerHTML = '<p>No active rooms</p>';
+                    return;
+                }
+                
+                roomList.innerHTML = rooms.map(room => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <strong>${room.room_name}</strong> (${room.room_code})
+                            <span class="status-badge ${room.is_active ? 'status-active' : 'status-inactive'}">
+                                ${room.is_active ? 'Active' : 'Inactive'}
+                            </span><br>
+                            <small>Host: ${room.host_username} | Participants: ${room.participant_count}/${room.max_participants}</small><br>
+                            <small>Created: ${new Date(room.created_at).toLocaleString()}</small>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading rooms:', error);
+                roomList.innerHTML = '<p>Error loading rooms</p>';
+            }
+        }
+
+        // Load blocked list
+        async function loadBlocked() {
+            const blockedList = document.getElementById('blockedList');
+            blockedList.innerHTML = '<p>Loading blocked list...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/blocked`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    blockedList.innerHTML = '<p>Error loading blocked list</p>';
+                    return;
+                }
+                
+                const blocked = await response.json();
+                
+                if (blocked.length === 0) {
+                    blockedList.innerHTML = '<p>No blocked users or IPs</p>';
+                    return;
+                }
+                
+                blockedList.innerHTML = blocked.map(item => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            ${item.blocked_username ? `<strong>User: ${item.blocked_username}</strong>` : ''}
+                            ${item.ip_address ? `<strong>IP: ${item.ip_address}</strong>` : ''}<br>
+                            <small>Blocked by: ${item.blocked_by_username} | Date: ${new Date(item.blocked_at).toLocaleString()}</small>
+                            ${item.reason ? `<br><small>Reason: ${item.reason}</small>` : ''}
+                            ${item.room_name ? `<br><small>Room: ${item.room_name}</small>` : ''}
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn" onclick="unblock(${item.id})">Unblock</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading blocked list:', error);
+                blockedList.innerHTML = '<p>Error loading blocked list</p>';
+            }
+        }
+
+        // Unblock user/IP
+        async function unblock(id) {
+            if (!confirm('Are you sure you want to unblock this user/IP?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/blocked/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                if (response.ok) {
+                    alert('Unblocked successfully');
+                    loadBlocked();
+                } else {
+                    alert('Failed to unblock');
+                }
+            } catch (error) {
+                console.error('Error unblocking:', error);
+                alert('Failed to unblock');
             }
         }
 
@@ -424,6 +855,13 @@
             if (errorDiv) errorDiv.textContent = '';
             if (successDiv) successDiv.textContent = '';
             
+            // Reset login button
+            const loginButton = document.getElementById('loginButton');
+            if (loginButton) {
+                loginButton.disabled = false;
+                loginButton.textContent = 'Login as Admin';
+            }
+            
             console.log('Logout complete');
         }
 
@@ -451,7 +889,23 @@
                     authToken = storedToken;
                     currentUser = JSON.parse(storedUser);
                     console.log('Found existing admin session');
-                    setTimeout(loadAdminInterface, 500);
+                    
+                    // Verify token is still valid by making a test request
+                    fetch(`${API_URL}/api/users`, {
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`
+                        }
+                    }).then(response => {
+                        if (response.ok) {
+                            loadAdminInterface();
+                        } else {
+                            // Token expired, clear and show login
+                            localStorage.removeItem('authToken');
+                            localStorage.removeItem('currentUser');
+                            authToken = null;
+                            currentUser = null;
+                        }
+                    });
                 } catch (error) {
                     console.log('Invalid stored session data, clearing');
                     localStorage.removeItem('authToken');
@@ -471,11 +925,6 @@
                 column: columnNo,
                 error: error
             });
-            
-            const errorDiv = document.getElementById('adminLoginError');
-            if (errorDiv && msg.includes('login')) {
-                errorDiv.textContent = 'Login error occurred. Please refresh and try again.';
-            }
             
             return false;
         };
