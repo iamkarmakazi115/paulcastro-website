@@ -8,7 +8,7 @@ let currentRoom = null;
 // Add these variables at the top - they need to be defined or imported
 let authToken = null;
 let currentUser = null;
-const API_URL = 'https://api.karmakazi.org'; // Make sure this matches your API endpoint
+const API_URL = 'https://api.karmakazi.org/api'; // CORRECTED: Added /api prefix
 
 const ICE_SERVERS = [
     { urls: 'stun:stun.l.google.com:19302' },
@@ -90,6 +90,7 @@ function initializeChat() {
 }
 
 function connectSocket() {
+    // CORRECTED: Use base URL without /api for Socket.IO
     socket = io('https://api.karmakazi.org', {
         auth: {
             token: authToken
@@ -196,7 +197,7 @@ function addVideoStream(userId, stream, isLocal = false) {
     video.srcObject = stream;
 }
 
-// Fixed loadChatRooms function with better error handling
+// FIXED: loadChatRooms function with correct API path and better error handling
 async function loadChatRooms() {
     if (!authToken) {
         console.error('No auth token available');
@@ -207,6 +208,7 @@ async function loadChatRooms() {
         console.log('Fetching rooms from:', `${API_URL}/rooms`);
         console.log('Using token:', authToken ? 'Token present' : 'No token');
         
+        // CORRECTED: Now uses /api/rooms endpoint
         const response = await fetch(`${API_URL}/rooms`, {
             method: 'GET',
             headers: {
@@ -216,18 +218,24 @@ async function loadChatRooms() {
         });
         
         console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
+        console.log('Response headers:', [...response.headers.entries()]);
         
         if (!response.ok) {
             const errorText = await response.text();
             console.error('Failed to load rooms:', response.status, errorText);
             
             if (response.status === 401) {
-                alert('Authentication failed. Please log in again.');
-                // Clear invalid token and redirect to login
-                localStorage.removeItem('authToken');
-                sessionStorage.removeItem('authToken');
-                // Redirect to login page or show login modal
+                console.log('Authentication failed - token may be invalid or temporary');
+                const roomsList = document.getElementById('roomsList');
+                roomsList.innerHTML = '<div class="auth-error">Authentication required. Using temporary access.</div>';
+                
+                // Don't clear token immediately - might be temporary auth
+                // Just show a message and continue
+                return;
+            } else if (response.status === 404) {
+                console.log('Rooms endpoint not found');
+                const roomsList = document.getElementById('roomsList');
+                roomsList.innerHTML = '<div class="no-rooms">Rooms feature not available yet</div>';
                 return;
             }
             return;
@@ -239,7 +247,7 @@ async function loadChatRooms() {
         const roomsList = document.getElementById('roomsList');
         
         if (!rooms || rooms.length === 0) {
-            roomsList.innerHTML = '<div class="no-rooms">No rooms available</div>';
+            roomsList.innerHTML = '<div class="no-rooms">No rooms available. Create one to get started!</div>';
             return;
         }
         
@@ -258,7 +266,7 @@ async function loadChatRooms() {
     } catch (error) {
         console.error('Error loading rooms:', error);
         const roomsList = document.getElementById('roomsList');
-        roomsList.innerHTML = '<div class="error">Failed to load rooms</div>';
+        roomsList.innerHTML = '<div class="error">Network error. Check your connection.</div>';
     }
 }
 
@@ -298,6 +306,7 @@ async function createRoom() {
     }
     
     try {
+        // CORRECTED: Now uses /api/rooms endpoint
         const response = await fetch(`${API_URL}/rooms`, {
             method: 'POST',
             headers: {
@@ -313,8 +322,18 @@ async function createRoom() {
         });
         
         if (!response.ok) {
-            const error = await response.json();
-            alert(error.error || 'Failed to create room');
+            let errorMsg = 'Failed to create room';
+            try {
+                const error = await response.json();
+                errorMsg = error.error || error.message || errorMsg;
+            } catch (e) {
+                if (response.status === 401) {
+                    errorMsg = 'Authentication required to create rooms';
+                } else if (response.status === 404) {
+                    errorMsg = 'Room creation not available yet';
+                }
+            }
+            alert(errorMsg);
             return;
         }
         
@@ -324,7 +343,7 @@ async function createRoom() {
         joinRoom(room.room_code);
     } catch (error) {
         console.error('Error creating room:', error);
-        alert('Failed to create room');
+        alert('Network error. Please try again.');
     }
 }
 
