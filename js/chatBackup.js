@@ -5,36 +5,12 @@ let localStream = null;
 let peerConnections = {};
 let currentRoom = null;
 
-// Add these variables at the top - they need to be defined or imported
-let authToken = null;
-let currentUser = null;
-const API_URL = 'https://api.karmakazi.org'; // Make sure this matches your API endpoint
-
 const ICE_SERVERS = [
     { urls: 'stun:stun.l.google.com:19302' },
     { urls: 'stun:stun1.l.google.com:19302' }
 ];
 
-// Add this function to initialize auth token
-function getAuthToken() {
-    // Get token from localStorage or sessionStorage
-    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-    if (!token) {
-        console.error('No auth token found');
-        // Redirect to login or show error
-        return null;
-    }
-    return token;
-}
-
 function initializeChat() {
-    // Initialize auth token
-    authToken = getAuthToken();
-    if (!authToken) {
-        alert('Please log in to use chat');
-        return;
-    }
-
     const chatInterface = document.getElementById('chatInterface');
     
     chatInterface.innerHTML = `
@@ -57,7 +33,7 @@ function initializeChat() {
                 </div>
                 
                 <div class="controls">
-                    <button id="toggleVideo" onclick="toggleVideo()">🎹 Video</button>
+                    <button id="toggleVideo" onclick="toggleVideo()">📹 Video</button>
                     <button id="toggleAudio" onclick="toggleAudio()">🎤 Audio</button>
                     <button id="shareScreen" onclick="shareScreen()">🖥️ Share</button>
                 </div>
@@ -196,52 +172,18 @@ function addVideoStream(userId, stream, isLocal = false) {
     video.srcObject = stream;
 }
 
-// Fixed loadChatRooms function with better error handling
 async function loadChatRooms() {
-    if (!authToken) {
-        console.error('No auth token available');
-        return;
-    }
-
     try {
-        console.log('Fetching rooms from:', `${API_URL}/rooms`);
-        console.log('Using token:', authToken ? 'Token present' : 'No token');
-        
         const response = await fetch(`${API_URL}/rooms`, {
-            method: 'GET',
             headers: {
-                'Authorization': `Bearer ${authToken}`,
-                'Content-Type': 'application/json'
+                'Authorization': `Bearer ${authToken}`
             }
         });
         
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Failed to load rooms:', response.status, errorText);
-            
-            if (response.status === 401) {
-                alert('Authentication failed. Please log in again.');
-                // Clear invalid token and redirect to login
-                localStorage.removeItem('authToken');
-                sessionStorage.removeItem('authToken');
-                // Redirect to login page or show login modal
-                return;
-            }
-            return;
-        }
+        if (!response.ok) return;
         
         const rooms = await response.json();
-        console.log('Loaded rooms:', rooms);
-        
         const roomsList = document.getElementById('roomsList');
-        
-        if (!rooms || rooms.length === 0) {
-            roomsList.innerHTML = '<div class="no-rooms">No rooms available</div>';
-            return;
-        }
         
         roomsList.innerHTML = rooms.map(room => `
             <div class="room-item" onclick="joinRoom('${room.room_code}')">
@@ -250,15 +192,13 @@ async function loadChatRooms() {
                     <span class="room-code">${room.room_code}</span>
                 </div>
                 <div class="room-stats">
-                    <span class="participant-count">${room.participant_count || 0}/${room.max_participants || 50}</span>
+                    <span class="participant-count">${room.participant_count}/${room.max_participants}</span>
                     ${room.is_private ? '<span class="private-badge">🔒</span>' : ''}
                 </div>
             </div>
         `).join('');
     } catch (error) {
         console.error('Error loading rooms:', error);
-        const roomsList = document.getElementById('roomsList');
-        roomsList.innerHTML = '<div class="error">Failed to load rooms</div>';
     }
 }
 
@@ -422,7 +362,7 @@ function toggleVideo() {
         const videoTrack = localStream.getVideoTracks()[0];
         if (videoTrack) {
             videoTrack.enabled = !videoTrack.enabled;
-            document.getElementById('toggleVideo').textContent = videoTrack.enabled ? '🎹 Video' : '📷 Video';
+            document.getElementById('toggleVideo').textContent = videoTrack.enabled ? '📹 Video' : '📷 Video';
         }
     }
 }
