@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Paul Castro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/chat-admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <main class="content" style="margin-left: 0;">
+            <section class="page active">
+                <div class="page-header">
+                    <h2 class="page-title">Admin Panel</h2>
+                </div>
+                <div class="admin-content">
+                    <div class="admin-login" id="adminLogin">
+                        <div class="login-form">
+                            <h3>Admin Authentication</h3>
+                            <input type="text" id="adminUsername" placeholder="Admin Username" autocomplete="username">
+                            <input type="password" id="adminPassword" placeholder="Admin Password" autocomplete="current-password">
+                            <button class="login-btn" onclick="loginAdmin()">Login as Admin</button>
+                            <div class="error-message" id="adminLoginError"></div>
+                        </div>
+                    </div>
+                    <div class="admin-interface" id="adminInterface" style="display: none;">
+                        <!-- Admin interface will be loaded here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+</body>
+</html>

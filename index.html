@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paul Castro - Author & IT Professional</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/chat-admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Sidebar -->
+        <nav class="sidebar">
+            <div class="nav-container">
+                <div class="nav-item active" data-page="home">
+                    <span class="nav-text">Home</span>
+                </div>
+                <div class="nav-item" data-page="about">
+                    <span class="nav-text">About Me</span>
+                </div>
+                <div class="nav-item" data-page="works">
+                    <span class="nav-text">My Works</span>
+                </div>
+                <div class="nav-item" data-page="social">
+                    <span class="nav-text">Social</span>
+                </div>
+                <div class="nav-item" data-page="chat" id="chatNav">
+                    <span class="nav-text">Live Chat</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content">
+            <!-- Home Page -->
+            <section id="home" class="page active">
+                <div class="hero">
+                    <h1 class="glitch" data-text="Paul Castro">Paul Castro</h1>
+                    <p class="subtitle">Author | IT Network Administrator | Creator</p>
+                    <div class="hero-description">
+                        <p>Welcome to my digital realm where technology meets imagination. Explore my literary works, 
+                        connect with my journey, and join the community of readers and tech enthusiasts.</p>
+                    </div>
+                    <div class="cta-buttons">
+                        <button class="cta-btn primary" onclick="navigateToPage('works')">Explore My Works</button>
+                        <button class="cta-btn secondary" onclick="navigateToPage('about')">Learn More</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Me Page -->
+            <section id="about" class="page">
+                <div class="page-header">
+                    <h2 class="page-title">About Me</h2>
+                </div>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>For over a decade, I've navigated the intricate world of IT infrastructure as a Network Administrator, 
+                        architecting secure and efficient systems that power modern businesses. My expertise spans from complex 
+                        network topologies to cutting-edge security implementations, always staying ahead of the technological curve.</p>
+                        
+                        <p>But my passion extends far beyond server rooms and command lines. As an avid tabletop RPG enthusiast, 
+                        I've spent countless hours crafting worlds, weaving narratives, and bringing characters to life around 
+                        the gaming table. This love for storytelling naturally evolved into my writing career, where I blend 
+                        my technical knowledge with creative imagination.</p>
+                        
+                        <p>My literary works explore the boundaries between technology and fantasy, often featuring complex 
+                        characters navigating worlds where ancient magic collides with modern sensibilities. Each story is 
+                        crafted with the same precision I apply to network architecture, building intricate plot structures 
+                        that keep readers engaged from the first page to the last.</p>
+                        
+                        <p>When I'm not debugging code or plotting my next novel, you'll find me immersed in books across 
+                        all genres, constantly learning and drawing inspiration from fellow creators. I believe that the best 
+                        stories come from understanding both the logical frameworks that govern our world and the creative 
+                        chaos that makes us human.</p>
+                    </div>
+                    <div class="skills-section">
+                        <h3>Core Expertise</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Network Architecture</span>
+                            <span class="skill-tag">Cybersecurity</span>
+                            <span class="skill-tag">Cloud Infrastructure</span>
+                            <span class="skill-tag">Creative Writing</span>
+                            <span class="skill-tag">World Building</span>
+                            <span class="skill-tag">Narrative Design</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Works Page -->
+            <section id="works" class="page">
+                <div class="page-header">
+                    <h2 class="page-title">My Works</h2>
+                </div>
+                <div class="works-grid">
+                    <!-- Book entries will be dynamically loaded here -->
+                </div>
+            </section>
+
+            <!-- Social Page -->
+            <section id="social" class="page">
+                <div class="page-header">
+                    <h2 class="page-title">Social</h2>
+                </div>
+                <div class="social-content">
+                    <div class="facebook-feed">
+                        <h3>Latest Updates from Facebook</h3>
+                        <div id="fb-root"></div>
+                        <div class="fb-page" 
+                             data-href="https://www.facebook.com/profile.php?id=61579899121583" 
+                             data-tabs="timeline" 
+                             data-width="500" 
+                             data-height="800" 
+                             data-small-header="false" 
+                             data-adapt-container-width="true" 
+                             data-hide-cover="false" 
+                             data-show-facepile="true">
+                            <blockquote cite="https://www.facebook.com/profile.php?id=61579899121583" 
+                                        class="fb-xfbml-parse-ignore">
+                                <a href="https://www.facebook.com/profile.php?id=61579899121583">Paul Castro - Author</a>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Chat Page -->
+            <section id="chat" class="page">
+                <div class="page-header">
+                    <h2 class="page-title">Live Chat</h2>
+                </div>
+                <div class="chat-login" id="chatLogin">
+                    <div class="login-form">
+                        <h3>Enter Live Chat</h3>
+                        <p>Please login to access the live chat rooms</p>
+                        <input type="text" id="chatUsername" placeholder="Username" autocomplete="username">
+                        <input type="password" id="chatPassword" placeholder="Password" autocomplete="current-password">
+                        <button class="login-btn" onclick="loginToChat()">Enter Chat</button>
+                        <div class="error-message" id="loginError"></div>
+                    </div>
+                </div>
+                <div class="chat-interface" id="chatInterface" style="display: none;">
+                    <!-- Chat interface will be loaded after login -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="contact-section">
+                <h3>Contact Me</h3>
+                <div class="contact-info">
+                    <a href="tel:3462030833" class="contact-link">
+                        <span class="contact-icon">📱</span> (346) 203-0833
+                    </a>
+                    <a href="mailto:paul_castro@karmakazi.org" class="contact-link">
+                        <span class="contact-icon">✉️</span> paul_castro@karmakazi.org
+                    </a>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2024 Paul Castro. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/books.js"></script>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script src="js/chat.js"></script>
+    <script async defer crossorigin="anonymous" 
+            src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0">
+    </script>
+</body>
+</html>
