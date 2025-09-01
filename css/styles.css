@@ -409,88 +409,109 @@ body {
 
 .novels-section h3 {
     font-family: 'Orbitron', monospace;
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 2.5rem;
     color: var(--accent);
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .novels-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     margin-top: 2rem;
 }
 
 .novel-card {
     background: linear-gradient(135deg, 
-        rgba(26, 26, 26, 0.4), 
-        rgba(139, 0, 0, 0.1));
-    border: 1px solid rgba(220, 20, 60, 0.3);
-    border-radius: 12px;
-    padding: 1.5rem;
+        rgba(10, 10, 10, 0.8), 
+        rgba(139, 0, 0, 0.2));
+    border: 2px solid rgba(220, 20, 60, 0.4);
+    border-radius: 15px;
+    padding: 2rem;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 .novel-card::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
+    left: -100%;
     width: 100%;
-    height: 2px;
+    height: 3px;
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    animation: scan 3s linear infinite;
+    animation: scan 4s linear infinite;
+}
+
+.novel-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -100%;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
+    animation: scan-reverse 4s linear infinite;
 }
 
 @keyframes scan {
     from {
-        transform: translateX(-100%);
+        left: -100%;
     }
     to {
-        transform: translateX(100%);
+        left: 100%;
+    }
+}
+
+@keyframes scan-reverse {
+    from {
+        right: -100%;
+    }
+    to {
+        right: 100%;
     }
 }
 
 .novel-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(220, 20, 60, 0.3);
+    transform: translateX(5px);
+    box-shadow: 0 8px 30px rgba(220, 20, 60, 0.4);
     border-color: var(--accent);
     background: linear-gradient(135deg, 
-        rgba(26, 26, 26, 0.6), 
-        rgba(220, 20, 60, 0.2));
+        rgba(10, 10, 10, 0.9), 
+        rgba(220, 20, 60, 0.3));
 }
 
 .novel-title {
     font-family: 'Orbitron', monospace;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 700;
-    color: var(--primary-red);
+    color: var(--accent);
     margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .novel-tagline {
     font-style: italic;
-    color: rgba(224, 224, 224, 0.8);
-    margin-bottom: 0.75rem;
-    font-size: 0.9rem;
+    color: rgba(224, 224, 224, 0.9);
+    margin-bottom: 1rem;
+    font-size: 1rem;
     font-weight: 500;
+    border-left: 3px solid var(--primary-red);
+    padding-left: 1rem;
 }
 
 .novel-blurb {
-    line-height: 1.6;
-    color: rgba(224, 224, 224, 0.75);
-    font-size: 0.85rem;
-}
-
-/* Responsive adjustment for novels grid */
-@media (max-width: 992px) {
-    .novels-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
+    line-height: 1.7;
+    color: rgba(224, 224, 224, 0.8);
+    font-size: 0.95rem;
+    text-align: justify;
 }
 
 /* Social Page */
