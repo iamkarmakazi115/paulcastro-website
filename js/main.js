@@ -6,21 +6,18 @@ const API_URL = 'https://api.karmakazi.org/api';
 let authToken = localStorage.getItem('authToken');
 let currentUser = null;
 
-// Immediately define and expose the navigation function
-window.navigateToPage = function(pageId) {
+// Navigation function
+function navigateToPage(pageId) {
     console.log('Real navigateToPage called for:', pageId);
     
-    // Hide all pages
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
     });
     
-    // Remove active class from all nav items
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
     });
     
-    // Show selected page
     const selectedPage = document.getElementById(pageId);
     if (selectedPage) {
         selectedPage.classList.add('active');
@@ -29,38 +26,24 @@ window.navigateToPage = function(pageId) {
         console.error('Page not found:', pageId);
     }
     
-    // Add active class to corresponding nav item
     const navItem = document.querySelector(`[data-page="${pageId}"]`);
     if (navItem) {
         navItem.classList.add('active');
         console.log('Nav item activated:', pageId);
     }
     
-    // Track page visit
     trackPageVisit(pageId);
     
-    // Special handling for certain pages
     if (pageId === 'works') {
-        console.log('Works page selected, calling loadBooks');
-        // Try multiple ways to ensure books load
-        setTimeout(() => {
-            if (typeof window.loadBooks === 'function') {
-                console.log('Calling window.loadBooks');
-                window.loadBooks();
-            } else if (typeof loadBooks === 'function') {
-                console.log('Calling loadBooks directly');
-                loadBooks();
-            } else {
-                console.error('loadBooks function not found');
-            }
-        }, 100);
+        console.log('Loading books for works page');
+        setTimeout(loadBooksDirectly, 100);
     } else if (pageId === 'chat') {
         checkChatAccess();
     }
-};
+}
 
-// Immediately define and expose the admin login function
-window.loginAdmin = async function() {
+// Admin login function
+async function loginAdmin() {
     console.log('Real loginAdmin called');
     
     const usernameInput = document.getElementById('adminUsername');
@@ -83,33 +66,28 @@ window.loginAdmin = async function() {
         return;
     }
     
-    // Check hardcoded credentials first
     if (username === 'JohnC' && password === 'Gantz115!') {
-        console.log('Hardcoded admin login successful');
+        console.log('Admin login successful');
         if (errorDiv) errorDiv.textContent = '';
         
-        // Set mock admin data
         authToken = 'mock-admin-token-' + Date.now();
         currentUser = { username: 'JohnC', role: 'admin', id: 1 };
         localStorage.setItem('authToken', authToken);
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         
-        // Clear form
         usernameInput.value = '';
         passwordInput.value = '';
         
-        // Load admin interface
         loadAdminInterface();
         return;
     }
     
-    // If hardcoded credentials don't match, show error
     if (errorDiv) errorDiv.textContent = 'Invalid admin credentials';
     console.log('Invalid credentials provided');
-};
+}
 
-// Immediately define and expose the chat login function
-window.loginToChat = async function() {
+// Chat login function
+async function loginToChat() {
     console.log('Real loginToChat called');
     
     const usernameInput = document.getElementById('chatUsername');
@@ -150,89 +128,30 @@ window.loginToChat = async function() {
         localStorage.setItem('authToken', authToken);
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         
-        // Clear form
         usernameInput.value = '';
         passwordInput.value = '';
         if (errorDiv) errorDiv.textContent = '';
         
-        // Load chat interface
         loadChatInterface();
     } catch (error) {
         console.error('Login error:', error);
         if (errorDiv) errorDiv.textContent = 'Connection error. Please try again.';
     }
-};
-
-// Store references to real functions
-const navigateToPage = window.navigateToPage;
-const loginAdmin = window.loginAdmin;
-const loginToChat = window.loginToChat;
-
-// Initialize page when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded - initializing...');
-    
-    // Re-expose functions to make sure they're available
-    window.navigateToPage = navigateToPage;
-    window.loginAdmin = loginAdmin;
-    window.loginToChat = loginToChat;
-    
-    // Initialize navigation with both click handlers AND onclick attributes
-    initializeNavigation();
-    
-    // Check for admin token in URL
-    checkAdminAccess();
-    
-    // Initialize books - try multiple approaches
-    setTimeout(function() {
-        console.log('Attempting to load books...');
-        
-        // Check if we're on the works page and it's visible
-        const worksPage = document.getElementById('works');
-        if (worksPage && worksPage.classList.contains('active')) {
-            console.log('Works page is active, loading books');
-            tryLoadBooks();
-        }
-        
-        // Also load books by default since it's the showcase
-        tryLoadBooks();
-    }, 200);
-    
-    console.log('Initialization complete');
-});
-
-// Function to try loading books with multiple fallbacks
-function tryLoadBooks() {
-    console.log('tryLoadBooks called');
-    
-    if (typeof window.loadBooks === 'function') {
-        console.log('Found window.loadBooks, calling it');
-        window.loadBooks();
-    } else if (typeof loadBooks === 'function') {
-        console.log('Found loadBooks, calling it');
-        loadBooks();
-    } else {
-        console.log('loadBooks not found, will try again in 500ms');
-        setTimeout(() => {
-            if (typeof window.loadBooks === 'function') {
-                console.log('Retry: calling window.loadBooks');
-                window.loadBooks();
-            } else {
-                console.error('loadBooks function still not available after retry');
-                // Manual fallback - load books inline
-                loadBooksManually();
-            }
-        }, 500);
-    }
 }
 
-// Manual fallback to load books if books.js fails
-function loadBooksManually() {
-    console.log('Loading books manually as fallback');
+// Load books directly (embedded data to avoid external file issues)
+function loadBooksDirectly() {
+    console.log('loadBooksDirectly called');
     const worksGrid = document.querySelector('.works-grid');
-    if (!worksGrid) return;
     
-    const fallbackBooks = [
+    if (!worksGrid) {
+        console.error('Works grid element not found');
+        return;
+    }
+    
+    console.log('Found works grid, loading books');
+    
+    const books = [
         {
             title: "Blood Howls",
             subtitle: "When ancient blood awakens, the hunt begins.",
@@ -246,17 +165,17 @@ function loadBooksManually() {
         {
             title: "Out of Time",
             subtitle: "When a prince is murdered and hung like a scarecrow, the killer leaves behind more than a corpse.",
-            description: "Cael Ward Corbin has spent years hiding what he is: a memory-binder caught between the Seelie and Unseelie Courts. When Prince Alarion is found crucified with the forbidden sigil of the Outriders, Cael's investigation unearths a conspiracy."
+            description: "Cael Ward Corbin has spent years hiding what he is: a memory-binder caught between the Seelie and Unseelie Courts. When Prince Alarion is found crucified with the forbidden sigil of the Outriders, Cael's investigation unearths a conspiracy that reaches into his buried past."
         },
         {
             title: "Which Way the Wind Blows",
             subtitle: "In the shadows between light and darkness, a bastard prince must choose his crown.",
-            description: "When Veraden—son of the ruthless Queen Mab—rescues Lord Calendreth from an Unseelie dungeon, he triggers a war that will shatter the ancient balance between the courts."
+            description: "When Veraden—son of the ruthless Queen Mab—rescues Lord Calendreth from an Unseelie dungeon, he triggers a war that will shatter the ancient balance between the courts. Raised in secret by a shapeshifting Glamourling, Veraden leads a desperate resistance from the ashes of the fallen court."
         },
         {
             title: "The Descent - Book 1",
             subtitle: "Born from fire and hidden in shadow, Lucien Graves never knew he was heir to a throne built on blood.",
-            description: "Bartending in the vampire-owned clubs of Kharvas, Lucien lives quietly until ancient relics begin awakening in his presence. When he discovers his true identity as the son of murdered vampire royalty, he's thrust into a war."
+            description: "Bartending in the vampire-owned clubs of Kharvas, Lucien lives quietly until ancient relics begin awakening in his presence. When he discovers his true identity as the son of murdered vampire royalty, he's thrust into a war that has been brewing since the fall of the old kingdom."
         },
         {
             title: "The Descent: Ash Reborn - Book 2",
@@ -265,7 +184,7 @@ function loadBooksManually() {
         }
     ];
     
-    worksGrid.innerHTML = fallbackBooks.map(book => `
+    worksGrid.innerHTML = books.map(book => `
         <div class="book-card">
             <h3 class="book-title">${book.title}</h3>
             <p class="book-subtitle">${book.subtitle}</p>
@@ -273,8 +192,39 @@ function loadBooksManually() {
         </div>
     `).join('');
     
-    console.log('Manual book loading complete');
+    const cards = document.querySelectorAll('.book-card');
+    cards.forEach((card, index) => {
+        setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+    
+    console.log('Books loaded successfully, found', cards.length, 'book cards');
 }
+
+// Make functions globally available immediately
+window.navigateToPage = navigateToPage;
+window.loginAdmin = loginAdmin;
+window.loginToChat = loginToChat;
+window.loadBooks = loadBooksDirectly;
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - initializing...');
+    
+    initializeNavigation();
+    checkAdminAccess();
+    
+    // Load books immediately if on works page
+    const worksPage = document.getElementById('works');
+    if (worksPage && worksPage.classList.contains('active')) {
+        console.log('Works page is active, loading books');
+        setTimeout(loadBooksDirectly, 200);
+    }
+    
+    console.log('Initialization complete');
+});
 
 // Navigation initialization
 function initializeNavigation() {
@@ -287,7 +237,6 @@ function initializeNavigation() {
         const page = item.getAttribute('data-page');
         console.log('Processing nav item ' + index + ':', page);
         
-        // Add click event listener
         item.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -295,11 +244,9 @@ function initializeNavigation() {
             navigateToPage(page);
         });
         
-        // Also add onclick attribute as backup
         item.setAttribute('onclick', 'navigateToPage(\'' + page + '\')');
     });
     
-    // Also handle CTA buttons
     const ctaButtons = document.querySelectorAll('.cta-btn');
     ctaButtons.forEach(function(button) {
         const onclick = button.getAttribute('onclick');
@@ -315,7 +262,7 @@ function initializeNavigation() {
     });
 }
 
-// Track page visits for analytics
+// Track page visits
 async function trackPageVisit(page) {
     try {
         await fetch(`${API_URL}/analytics`, {
@@ -333,7 +280,7 @@ async function trackPageVisit(page) {
     }
 }
 
-// Check if user has chat access
+// Check chat access
 function checkChatAccess() {
     if (!authToken) {
         const chatLogin = document.getElementById('chatLogin');
@@ -345,7 +292,7 @@ function checkChatAccess() {
     }
 }
 
-// Load chat interface after successful login
+// Load chat interface
 function loadChatInterface() {
     const chatLogin = document.getElementById('chatLogin');
     const chatInterface = document.getElementById('chatInterface');
@@ -353,19 +300,17 @@ function loadChatInterface() {
     if (chatLogin) chatLogin.style.display = 'none';
     if (chatInterface) chatInterface.style.display = 'block';
     
-    // Load the chat component
     if (typeof initializeChat === 'function') {
         initializeChat();
     }
 }
 
-// Check for admin access
+// Check admin access
 function checkAdminAccess() {
     const urlParams = new URLSearchParams(window.location.search);
     const adminKey = urlParams.get('admin');
     
     if (adminKey === 'secure-admin-2024') {
-        // Add admin navigation item if not present
         if (!document.querySelector('[data-page="admin"]')) {
             const navContainer = document.querySelector('.nav-container');
             if (navContainer) {
@@ -375,21 +320,18 @@ function checkAdminAccess() {
                 adminNav.setAttribute('onclick', 'navigateToPage(\'admin\')');
                 adminNav.innerHTML = '<span class="nav-text">Admin</span>';
                 
-                // Add event listener
                 adminNav.addEventListener('click', function() {
                     navigateToPage('admin');
                 });
                 
                 navContainer.appendChild(adminNav);
-                
-                // Create admin page
                 createAdminPage();
             }
         }
     }
 }
 
-// Create admin page dynamically
+// Create admin page
 function createAdminPage() {
     const content = document.querySelector('.content');
     if (!content) return;
@@ -450,128 +392,37 @@ async function loadAdminInterface() {
             </div>
             <div class="admin-section">
                 <h3>User Management</h3>
-                <button onclick="showAddUserForm()">Add New User</button>
-                <div id="usersList">
-                    <p>User management features would connect to your API server.</p>
-                    <p>API Status: ${API_URL}</p>
-                </div>
-            </div>
-            <div class="admin-section">
-                <h3>Active Rooms</h3>
-                <div id="roomsList">
-                    <p>Room management features would connect to your chat server.</p>
-                </div>
+                <p>User management features would connect to your API server.</p>
+                <p>API Status: ${API_URL}</p>
             </div>
             <div class="admin-section">
                 <h3>System Status</h3>
-                <div id="systemStatus">
-                    <p>API Status: <span class="status-indicator">Ready</span></p>
-                    <p>Admin Panel: <span class="status-indicator">Active</span></p>
-                    <p>Current Time: <span id="currentTime">${new Date().toLocaleString()}</span></p>
-                </div>
+                <p>API Status: <span class="status-indicator">Ready</span></p>
+                <p>Admin Panel: <span class="status-indicator">Active</span></p>
+                <p>Current Time: <span id="currentTime">${new Date().toLocaleString()}</span></p>
             </div>
         </div>
     `;
     
     console.log('Admin interface loaded successfully');
     
-    // Update time every second
     setInterval(function() {
         const timeElement = document.getElementById('currentTime');
         if (timeElement) {
             timeElement.textContent = new Date().toLocaleString();
         }
     }, 1000);
-    
-    // Try to load actual data if API is available
-    loadUsers();
-    loadRooms();
 }
-
-// Load users for admin (with fallback)
-async function loadUsers() {
-    const usersList = document.getElementById('usersList');
-    if (!usersList) return;
-    
-    try {
-        const response = await fetch(`${API_URL}/users`, {
-            headers: {
-                'Authorization': `Bearer ${authToken}`
-            }
-        });
-        
-        if (!response.ok) {
-            usersList.innerHTML = '<p>API not available - this would show user management when your server is running.</p>';
-            return;
-        }
-        
-        const users = await response.json();
-        
-        usersList.innerHTML = users.map(user => `
-            <div class="admin-item">
-                <span>${user.username} (${user.role || 'user'})</span>
-                <span>${user.email || 'No email'}</span>
-                <span>Last login: ${user.last_login ? new Date(user.last_login).toLocaleString() : 'Never'}</span>
-            </div>
-        `).join('');
-    } catch (error) {
-        console.error('Error loading users:', error);
-        if (usersList) {
-            usersList.innerHTML = '<p>API connection failed - this would show users when your server is running.</p>';
-        }
-    }
-}
-
-// Load rooms for admin (with fallback)
-async function loadRooms() {
-    const roomsList = document.getElementById('roomsList');
-    if (!roomsList) return;
-    
-    try {
-        const response = await fetch(`${API_URL}/rooms`, {
-            headers: {
-                'Authorization': `Bearer ${authToken}`
-            }
-        });
-        
-        if (!response.ok) {
-            roomsList.innerHTML = '<p>API not available - this would show active chat rooms when your server is running.</p>';
-            return;
-        }
-        
-        const rooms = await response.json();
-        
-        roomsList.innerHTML = rooms.map(room => `
-            <div class="admin-item">
-                <span>Room: ${room.name}</span>
-                <span>Users: ${room.user_count || 0}</span>
-                <span>Created: ${room.created_at ? new Date(room.created_at).toLocaleString() : 'Unknown'}</span>
-            </div>
-        `).join('');
-    } catch (error) {
-        console.error('Error loading rooms:', error);
-        if (roomsList) {
-            roomsList.innerHTML = '<p>API connection failed - this would show rooms when your server is running.</p>';
-        }
-    }
-}
-
-// Show add user form
-window.showAddUserForm = function() {
-    alert('Add user functionality would be implemented here when connected to your API server.');
-};
 
 // Logout function
 window.logout = function() {
     console.log('Logging out...');
     
-    // Clear storage
     localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');
     authToken = null;
     currentUser = null;
     
-    // Reset UI
     const adminLogin = document.getElementById('adminLogin');
     const adminInterface = document.getElementById('adminInterface');
     const chatLogin = document.getElementById('chatLogin');
@@ -582,13 +433,12 @@ window.logout = function() {
     if (chatLogin) chatLogin.style.display = 'block';
     if (chatInterface) chatInterface.style.display = 'none';
     
-    // Navigate to home
     navigateToPage('home');
     
     console.log('Logout complete');
 };
 
-// Enhanced error handling
+// Error handling
 window.onerror = function(msg, url, lineNo, columnNo, error) {
     console.error('JavaScript Error:', {
         message: msg,
@@ -617,14 +467,24 @@ window.testNavigation = function() {
     console.log('- loginAdmin:', typeof window.loginAdmin);
     console.log('- loginToChat:', typeof window.loginToChat);
     console.log('- logout:', typeof window.logout);
-    console.log('- loadBooks:', typeof window.loadBooks);
 };
 
-// Log when main.js is fully loaded
+// Add CSS for book cards
+const bookStyle = document.createElement('style');
+bookStyle.textContent = `
+    .book-card {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+`;
+document.head.appendChild(bookStyle);
+
 console.log('Main.js fully loaded and initialized');
 console.log('Functions exposed:', {
     navigateToPage: typeof window.navigateToPage,
     loginAdmin: typeof window.loginAdmin,
     loginToChat: typeof window.loginToChat,
-    logout: typeof window.logout
+    logout: typeof window.logout,
+    loadBooks: typeof window.loadBooks
 });

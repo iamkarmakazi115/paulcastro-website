@@ -4,93 +4,430 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Paul Castro</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/chat-admin.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #dc143c;
+            --dark-red: #8b0000;
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --text-light: #e0e0e0;
+            --accent: #ff4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--black) 0%, var(--dark-red) 50%, var(--dark-gray) 100%);
+            background-attachment: fixed;
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            padding: 2rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-content {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, var(--primary-red), var(--accent));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .login-form {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2.5rem;
+            border: 1px solid rgba(220, 20, 60, 0.2);
+        }
+
+        .login-form h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: var(--accent);
+        }
+
+        .login-form p {
+            text-align: center;
+            color: rgba(224, 224, 224, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(10, 10, 10, 0.6);
+            border: 1px solid rgba(220, 20, 60, 0.3);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(220, 20, 60, 0.3);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-red), var(--accent));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 20, 60, 0.4);
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .success-message {
+            color: #4caf50;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .debug-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(51, 51, 51, 0.3);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: rgba(224, 224, 224, 0.6);
+        }
+
+        .auto-fill-btn {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(220, 20, 60, 0.3);
+            border: 1px solid rgba(220, 20, 60, 0.5);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auto-fill-btn:hover {
+            background: rgba(220, 20, 60, 0.5);
+        }
+
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(220, 20, 60, 0.3);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(220, 20, 60, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .admin-interface {
+            display: none;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(220, 20, 60, 0.2);
+            margin-top: 2rem;
+        }
+
+        .admin-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(51, 51, 51, 0.4);
+            border-radius: 8px;
+        }
+
+        .admin-section h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(220, 20, 60, 0.3);
+            color: white;
+            border: 1px solid var(--accent);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(220, 20, 60, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .login-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <main class="content" style="margin-left: 0;">
-            <section class="page active">
-                <div class="page-header">
-                    <h2 class="page-title">Admin Panel</h2>
-                    <p style="text-align: center; color: rgba(224, 224, 224, 0.7); margin-top: 1rem;">
-                        Secure administrative access for Paul Castro's website
-                    </p>
-                </div>
-                <div class="admin-content">
-                    <div class="admin-login" id="adminLogin">
-                        <div class="login-form">
-                            <h3>Admin Authentication</h3>
-                            <p>Please enter your administrative credentials</p>
-                            <input type="text" id="adminUsername" placeholder="Admin Username" autocomplete="username">
-                            <input type="password" id="adminPassword" placeholder="Admin Password" autocomplete="current-password">
-                            <button class="login-btn" onclick="loginAdmin()" id="loginButton">Login as Admin</button>
-                            <div class="error-message" id="adminLoginError"></div>
-                            
-                            <!-- Debug info (remove in production) -->
-                            <div style="margin-top: 2rem; padding: 1rem; background: rgba(51, 51, 51, 0.3); border-radius: 8px; font-size: 0.9rem; color: rgba(224, 224, 224, 0.6);">
-                                <strong>Debug Info:</strong><br>
-                                Expected Username: JohnC<br>
-                                Expected Password: Gantz115!<br>
-                                <button onclick="fillCredentials()" style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(220, 20, 60, 0.3); border: 1px solid rgba(220, 20, 60, 0.5); color: white; border-radius: 4px; cursor: pointer;">Auto-fill Credentials</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="admin-interface" id="adminInterface" style="display: none;">
-                        <!-- Admin interface will be loaded here -->
-                    </div>
-                </div>
-            </section>
-        </main>
+        <a href="index.html" class="back-link">← Back to Main Site</a>
         
-        <!-- Back to main site link -->
-        <div style="position: fixed; top: 20px; left: 20px; z-index: 2000;">
-            <a href="index.html" style="color: var(--accent); text-decoration: none; padding: 0.5rem 1rem; background: rgba(26, 26, 26, 0.8); border: 1px solid rgba(220, 20, 60, 0.3); border-radius: 8px; transition: all 0.3s ease;">
-                ← Back to Main Site
-            </a>
+        <div class="admin-content">
+            <div class="page-header">
+                <h2 class="page-title">Admin Panel</h2>
+                <p style="text-align: center; color: rgba(224, 224, 224, 0.7);">
+                    Secure administrative access for Paul Castro's website
+                </p>
+            </div>
+            
+            <div class="admin-login" id="adminLogin">
+                <div class="login-form">
+                    <h3>Admin Authentication</h3>
+                    <p>Please enter your administrative credentials</p>
+                    <input type="text" id="adminUsername" placeholder="Admin Username" autocomplete="username">
+                    <input type="password" id="adminPassword" placeholder="Admin Password" autocomplete="current-password">
+                    <button class="login-btn" onclick="loginAdmin()" id="loginButton">Login as Admin</button>
+                    <div class="error-message" id="adminLoginError"></div>
+                    <div class="success-message" id="adminLoginSuccess"></div>
+                    
+                    <div class="debug-info">
+                        <strong>Debug Info:</strong><br>
+                        Expected Username: JohnC<br>
+                        Expected Password: Gantz115!<br>
+                        <button onclick="fillCredentials()" class="auto-fill-btn">Auto-fill Credentials</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-interface" id="adminInterface">
+                <div class="admin-section">
+                    <h3>Welcome, Admin!</h3>
+                    <p>Successfully logged in as admin.</p>
+                    <p id="adminUserInfo"></p>
+                    <p id="adminLoginTime"></p>
+                    <button onclick="logout()" class="logout-btn">Logout</button>
+                </div>
+                
+                <div class="admin-section">
+                    <h3>System Status</h3>
+                    <p>Admin Panel: <span style="color: #4caf50;">Active</span></p>
+                    <p>Authentication: <span style="color: #4caf50;">Verified</span></p>
+                    <p>Current Time: <span id="currentTime"></span></p>
+                </div>
+                
+                <div class="admin-section">
+                    <h3>Management Features</h3>
+                    <p>User management and system controls would be available here when connected to your API server.</p>
+                    <p>API Endpoint: https://api.karmakazi.org/api</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Scripts with fallback function definitions -->
     <script>
         console.log('Admin page loading...');
-        
-        // Define fallback functions immediately
-        window.loginAdmin = window.loginAdmin || function() {
-            console.log('Fallback loginAdmin called - waiting for main.js to load');
-            // Set a flag to retry after main.js loads
-            window.adminLoginPending = true;
-        };
-        
-        window.fillCredentials = function() {
+
+        // Global variables
+        let authToken = null;
+        let currentUser = null;
+
+        // Auto-fill credentials function
+        function fillCredentials() {
             document.getElementById('adminUsername').value = 'JohnC';
             document.getElementById('adminPassword').value = 'Gantz115!';
-        };
-        
-        // Function to check if main.js loaded properly
-        function checkMainJsLoaded() {
-            console.log('Checking if main.js loaded...');
-            console.log('loginAdmin type:', typeof window.loginAdmin);
+            console.log('Credentials auto-filled');
+        }
+
+        // Login function
+        function loginAdmin() {
+            console.log('Admin login attempt');
             
-            if (typeof window.loginAdmin === 'function' && window.loginAdmin.toString().includes('Real loginAdmin')) {
-                console.log('Main.js loaded successfully');
+            const usernameInput = document.getElementById('adminUsername');
+            const passwordInput = document.getElementById('adminPassword');
+            const errorDiv = document.getElementById('adminLoginError');
+            const successDiv = document.getElementById('adminLoginSuccess');
+            
+            // Clear previous messages
+            errorDiv.textContent = '';
+            successDiv.textContent = '';
+            
+            if (!usernameInput || !passwordInput) {
+                errorDiv.textContent = 'Login form elements not found';
+                return;
+            }
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            console.log('Login attempt for username:', username);
+            
+            if (!username || !password) {
+                errorDiv.textContent = 'Please enter both username and password';
+                return;
+            }
+            
+            // Check hardcoded credentials
+            if (username === 'JohnC' && password === 'Gantz115!') {
+                console.log('Admin login successful');
                 
-                // If there was a pending login attempt, retry it
-                if (window.adminLoginPending) {
-                    console.log('Retrying pending login...');
-                    window.adminLoginPending = false;
-                    window.loginAdmin();
+                // Set admin data
+                authToken = 'mock-admin-token-' + Date.now();
+                currentUser = { username: 'JohnC', role: 'admin', id: 1 };
+                
+                // Store in localStorage
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                // Show success message
+                successDiv.textContent = 'Login successful! Loading admin interface...';
+                
+                // Clear form
+                usernameInput.value = '';
+                passwordInput.value = '';
+                
+                // Load admin interface after short delay
+                setTimeout(function() {
+                    loadAdminInterface();
+                }, 1000);
+                
+                return;
+            }
+            
+            // Invalid credentials
+            errorDiv.textContent = 'Invalid admin credentials. Please check username and password.';
+            console.log('Invalid credentials provided');
+        }
+
+        // Load admin interface
+        function loadAdminInterface() {
+            console.log('Loading admin interface...');
+            
+            const adminLogin = document.getElementById('adminLogin');
+            const adminInterface = document.getElementById('adminInterface');
+            
+            if (adminLogin) {
+                adminLogin.style.display = 'none';
+                console.log('Admin login form hidden');
+            }
+            
+            if (adminInterface) {
+                adminInterface.style.display = 'block';
+                console.log('Admin interface shown');
+                
+                // Update admin info
+                const userInfo = document.getElementById('adminUserInfo');
+                const loginTime = document.getElementById('adminLoginTime');
+                
+                if (userInfo && currentUser) {
+                    userInfo.innerHTML = `<strong>Username:</strong> ${currentUser.username} | <strong>Role:</strong> ${currentUser.role}`;
                 }
+                
+                if (loginTime) {
+                    loginTime.innerHTML = `<strong>Login Time:</strong> ${new Date().toLocaleString()}`;
+                }
+                
+                // Start time update
+                updateTime();
+                setInterval(updateTime, 1000);
             } else {
-                console.log('Main.js not fully loaded yet, will retry...');
-                setTimeout(checkMainJsLoaded, 100);
+                console.error('Admin interface element not found');
             }
         }
-        
-        // Add enter key support for password field
+
+        // Update current time
+        function updateTime() {
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) {
+                timeElement.textContent = new Date().toLocaleString();
+            }
+        }
+
+        // Logout function
+        function logout() {
+            console.log('Logging out...');
+            
+            // Clear storage
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            authToken = null;
+            currentUser = null;
+            
+            // Reset UI
+            const adminLogin = document.getElementById('adminLogin');
+            const adminInterface = document.getElementById('adminInterface');
+            
+            if (adminLogin) adminLogin.style.display = 'block';
+            if (adminInterface) adminInterface.style.display = 'none';
+            
+            // Clear any messages
+            const errorDiv = document.getElementById('adminLoginError');
+            const successDiv = document.getElementById('adminLoginSuccess');
+            if (errorDiv) errorDiv.textContent = '';
+            if (successDiv) successDiv.textContent = '';
+            
+            console.log('Logout complete');
+        }
+
+        // Add enter key support for login
         document.addEventListener('DOMContentLoaded', function() {
             const passwordField = document.getElementById('adminPassword');
             const usernameField = document.getElementById('adminUsername');
@@ -98,42 +435,34 @@
             function handleEnterKey(event) {
                 if (event.key === 'Enter') {
                     event.preventDefault();
-                    window.loginAdmin();
+                    loginAdmin();
                 }
             }
             
             if (passwordField) passwordField.addEventListener('keypress', handleEnterKey);
             if (usernameField) usernameField.addEventListener('keypress', handleEnterKey);
             
-            // Check if main.js loaded
-            setTimeout(checkMainJsLoaded, 100);
-        });
-    </script>
-    
-    <!-- Load main JavaScript -->
-    <script src="js/main.js"></script>
-    
-    <!-- Debug script -->
-    <script>
-        window.addEventListener('load', function() {
-            console.log('Admin page fully loaded');
-            console.log('loginAdmin function available:', typeof window.loginAdmin);
-            console.log('Functions check:', {
-                loginAdmin: typeof window.loginAdmin,
-                navigateToPage: typeof window.navigateToPage,
-                logout: typeof window.logout
-            });
+            // Check if already logged in
+            const storedToken = localStorage.getItem('authToken');
+            const storedUser = localStorage.getItem('currentUser');
             
-            // Test login function
-            setTimeout(function() {
-                if (typeof window.testNavigation === 'function') {
-                    console.log('Running navigation test...');
-                    window.testNavigation();
+            if (storedToken && storedUser) {
+                try {
+                    authToken = storedToken;
+                    currentUser = JSON.parse(storedUser);
+                    console.log('Found existing admin session');
+                    setTimeout(loadAdminInterface, 500);
+                } catch (error) {
+                    console.log('Invalid stored session data, clearing');
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('currentUser');
                 }
-            }, 500);
+            }
+            
+            console.log('Admin page initialized');
         });
-        
-        // Error handler for debugging
+
+        // Error handling
         window.onerror = function(msg, url, lineNo, columnNo, error) {
             console.error('Admin page error:', {
                 message: msg,
@@ -144,12 +473,14 @@
             });
             
             const errorDiv = document.getElementById('adminLoginError');
-            if (errorDiv && msg.includes('loginAdmin')) {
-                errorDiv.innerHTML = 'Login function error. Please refresh the page and try again.';
+            if (errorDiv && msg.includes('login')) {
+                errorDiv.textContent = 'Login error occurred. Please refresh and try again.';
             }
             
             return false;
         };
+
+        console.log('Admin page script loaded successfully');
     </script>
 </body>
 </html>
