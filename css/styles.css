@@ -400,6 +400,99 @@ body {
     box-shadow: 0 4px 10px rgba(220, 20, 60, 0.3);
 }
 
+/* Novels Section */
+.novels-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(220, 20, 60, 0.2);
+}
+
+.novels-section h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: var(--accent);
+    text-align: center;
+}
+
+.novels-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.novel-card {
+    background: linear-gradient(135deg, 
+        rgba(26, 26, 26, 0.4), 
+        rgba(139, 0, 0, 0.1));
+    border: 1px solid rgba(220, 20, 60, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.novel-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: scan 3s linear infinite;
+}
+
+@keyframes scan {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+.novel-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(220, 20, 60, 0.3);
+    border-color: var(--accent);
+    background: linear-gradient(135deg, 
+        rgba(26, 26, 26, 0.6), 
+        rgba(220, 20, 60, 0.2));
+}
+
+.novel-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-red);
+    margin-bottom: 0.5rem;
+}
+
+.novel-tagline {
+    font-style: italic;
+    color: rgba(224, 224, 224, 0.8);
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.novel-blurb {
+    line-height: 1.6;
+    color: rgba(224, 224, 224, 0.75);
+    font-size: 0.85rem;
+}
+
+/* Responsive adjustment for novels grid */
+@media (max-width: 992px) {
+    .novels-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
 /* Social Page */
 .social-content {
     max-width: 800px;
