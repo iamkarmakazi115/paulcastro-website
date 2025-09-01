@@ -8,7 +8,7 @@ let currentRoom = null;
 // Add these variables at the top - they need to be defined or imported
 let authToken = null;
 let currentUser = null;
-const API_URL = 'https://api.karmakazi.org'; // CORRECTED: Removed /api prefix
+const API_URL = 'https://api.karmakazi.org/api'; // CORRECTED: Added /api prefix
 
 const ICE_SERVERS = [
     { urls: 'stun:stun.l.google.com:19302' },
@@ -57,7 +57,7 @@ function initializeChat() {
                 </div>
                 
                 <div class="controls">
-                    <button id="toggleVideo" onclick="toggleVideo()">📹 Video</button>
+                    <button id="toggleVideo" onclick="toggleVideo()">🎹 Video</button>
                     <button id="toggleAudio" onclick="toggleAudio()">🎤 Audio</button>
                     <button id="shareScreen" onclick="shareScreen()">🖥️ Share</button>
                 </div>
@@ -90,7 +90,7 @@ function initializeChat() {
 }
 
 function connectSocket() {
-    // Socket.IO uses base URL without /api
+    // CORRECTED: Use base URL without /api for Socket.IO
     socket = io('https://api.karmakazi.org', {
         auth: {
             token: authToken
@@ -208,7 +208,7 @@ async function loadChatRooms() {
         console.log('Fetching rooms from:', `${API_URL}/rooms`);
         console.log('Using token:', authToken ? 'Token present' : 'No token');
         
-        // CORRECTED: Now uses /rooms endpoint (removed /api prefix)
+        // CORRECTED: Now uses /api/rooms endpoint
         const response = await fetch(`${API_URL}/rooms`, {
             method: 'GET',
             headers: {
@@ -306,7 +306,7 @@ async function createRoom() {
     }
     
     try {
-        // CORRECTED: Now uses /rooms endpoint (removed /api prefix)
+        // CORRECTED: Now uses /api/rooms endpoint
         const response = await fetch(`${API_URL}/rooms`, {
             method: 'POST',
             headers: {
@@ -441,7 +441,7 @@ function toggleVideo() {
         const videoTrack = localStream.getVideoTracks()[0];
         if (videoTrack) {
             videoTrack.enabled = !videoTrack.enabled;
-            document.getElementById('toggleVideo').textContent = videoTrack.enabled ? '📹 Video' : '📷 Video';
+            document.getElementById('toggleVideo').textContent = videoTrack.enabled ? '🎹 Video' : '📷 Video';
         }
     }
 }
@@ -552,19 +552,3 @@ function kickUser(userId) {
         socket.emit('kick-user', userId);
     }
 }
-
-// Make initializeChat globally available immediately
-window.initializeChat = initializeChat;
-
-// Make functions globally available for onclick handlers
-window.joinRoom = joinRoom;
-window.createRoom = createRoom;
-window.closeModal = closeModal;
-window.sendMessage = sendMessage;
-window.handleMessageKeypress = handleMessageKeypress;
-window.toggleVideo = toggleVideo;
-window.toggleAudio = toggleAudio;
-window.shareScreen = shareScreen;
-window.kickUser = kickUser;
-window.leaveRoom = leaveRoom;
-window.showCreateRoomForm = showCreateRoomForm;

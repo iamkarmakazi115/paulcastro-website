@@ -129,7 +129,7 @@ window.loginAdmin = function() {
 };
 
 window.loginToChat = async function() {
-    console.log('Using corrected API paths - removed /api/ prefix');
+    console.log('Using corrected API paths - /api/ prefix discovered');
     
     const usernameInput = document.getElementById('chatUsername');
     const passwordInput = document.getElementById('chatPassword');
@@ -151,8 +151,8 @@ window.loginToChat = async function() {
     try {
         console.log('Attempting login with corrected API path:', username);
         
-        // CORRECTED: Use /auth/login (removed /api prefix)
-        const response = await fetch('https://api.karmakazi.org/auth/login', {
+        // CORRECTED: Use /api/auth/login (the /api prefix was missing before!)
+        const response = await fetch('https://api.karmakazi.org/api/auth/login', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
@@ -282,8 +282,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // EVERYTHING BELOW THIS POINT IS ADDITIONAL FUNCTIONALITY
-// API Configuration - CORRECTED API URL (removed /api)
-const API_URL = 'https://api.karmakazi.org';
+// API Configuration - CORRECTED API URL
+const API_URL = 'https://api.karmakazi.org/api';
 
 // Initialize authentication state
 function initializeAuthState() {
@@ -337,7 +337,6 @@ function navigateToPage(pageId) {
 // Track page visits
 async function trackPageVisit(page) {
     try {
-        // CORRECTED: removed /api prefix
         await fetch(`${API_URL}/analytics`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
