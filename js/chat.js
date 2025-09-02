@@ -12,7 +12,8 @@ let isAudioEnabled = true;
 // Initialize chat functionality
 document.addEventListener('DOMContentLoaded', () => {
     if (!utils.isLoggedIn()) {
-        window.location.href = '/index.html';
+        // Show login modal instead of redirecting
+        requestChatAccess();
         return;
     }
 
