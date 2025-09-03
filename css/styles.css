@@ -6,9 +6,9 @@
 /* CSS Variables */
 :root {
   --primary-red: #DC143C;
-  --primary-black: #0A0A0A;
-  --primary-grey: #2C2C2C;
-  --secondary-grey: #4A4A4A;
+  --primary-black: #ffffff;
+  --primary-grey: #5a5959;
+  --secondary-grey: #3a3a3a;
   --text-light: #E0E0E0;
   --text-hover: #FF6B6B;
   --gradient-1: linear-gradient(135deg, #DC143C 0%, #0A0A0A 50%, #2C2C2C 100%);
@@ -109,7 +109,7 @@ body.admin-page {
   transition: all 0.3s ease;
   transform-style: preserve-3d;
   text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.8),
+    2px 2px 4px rgba(255, 254, 254, 0.8),
     0 0 10px rgba(220, 20, 60, 0.3);
 }
 
@@ -130,7 +130,7 @@ body.admin-page {
   color: var(--text-hover);
   padding-left: 2.5rem;
   text-shadow: 
-    3px 3px 6px rgba(0, 0, 0, 1),
+    3px 3px 6px rgb(255, 255, 255),
     0 0 20px rgba(255, 107, 107, 0.6);
 }
 
@@ -549,6 +549,6 @@ body.admin-page {
 
 .action-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
 }
 </style>
