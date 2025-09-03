@@ -210,7 +210,7 @@ body.admin-page {
   bottom: 0;
   left: 250px;
   right: 0;
-  background: rgba(10, 10, 10, 0.95);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   padding: 1.5rem;
   text-align: center;
