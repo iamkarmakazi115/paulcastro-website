@@ -519,7 +519,7 @@ body.admin-page {
 }
 
 .admin-table tr:hover {
-  background: rgba(220, 20, 60, 0.1);
+  background: rgba(238, 233, 233, 0.937);
 }
 
 .action-btn {
@@ -549,6 +549,6 @@ body.admin-page {
 
 .action-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 10px rgba(238, 230, 230, 0.689);
 }
 </style>
