@@ -282,35 +282,44 @@ async function loadBlockedIPs() {
 async function loadAccessRequests() {
     const tbody = document.getElementById('requestsTableBody');
     
-    // Mock data for now
-    const requests = [
-        {
-            email: 'fan@example.com',
-            reason: 'Love your writing!',
-            ip: '192.168.1.50',
-            date: new Date(),
-            approved: false
+    try {
+        // Fetch real access requests from API
+        const requests = await utils.apiRequest('/admin/access-requests').catch(() => null);
+        
+        if (!requests || requests.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6">No pending access requests</td></tr>';
+            return;
         }
-    ];
-    
-    tbody.innerHTML = '';
-    requests.forEach((request, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${request.email}</td>
-            <td>${request.reason}</td>
-            <td>${request.ip}</td>
-            <td>${request.date.toLocaleDateString()}</td>
-            <td>${request.approved ? '<span style="color: #4CAF50;">Approved</span>' : '<span style="color: #FF9800;">Pending</span>'}</td>
-            <td>
-                ${!request.approved ? `
-                    <button onclick="approveRequest(${index})" class="action-btn unblock">Approve</button>
-                    <button onclick="denyRequest(${index})" class="action-btn block">Deny</button>
-                ` : ''}
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
+        
+        tbody.innerHTML = '';
+        requests.forEach(request => {
+            const row = document.createElement('tr');
+            const requestDate = new Date(request.requested_at).toLocaleDateString();
+            
+            row.innerHTML = `
+                <td>${request.email}</td>
+                <td>${request.reason}</td>
+                <td>${request.ip_address || 'Unknown'}</td>
+                <td>${requestDate}</td>
+                <td>${request.approved ? '<span style="color: #4CAF50;">Approved</span>' : '<span style="color: #FF9800;">Pending</span>'}</td>
+                <td>
+                    ${!request.approved ? `
+                        <button onclick="approveRequest(${request.id})" class="action-btn unblock">Approve</button>
+                        <button onclick="denyRequest(${request.id})" class="action-btn block">Deny</button>
+                    ` : ''}
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        // Update the pending requests count
+        const pendingCount = requests.filter(r => !r.approved).length;
+        document.getElementById('pendingRequests').textContent = pendingCount;
+        
+    } catch (error) {
+        console.error('Error loading access requests:', error);
+        tbody.innerHTML = '<tr><td colspan="6">Unable to load access requests</td></tr>';
+    }
 }
 
 // Show section
@@ -331,18 +340,35 @@ function showSection(section) {
 }
 
 // Approve user
-async function approveUser(userId) {
+async function approveRequest(requestId) {
     try {
-        await utils.apiRequest(`/admin/approve-user/${userId}`, {
+        const response = await utils.apiRequest(`/admin/approve-request/${requestId}`, {
             method: 'POST'
-        }).catch(() => {
-            // Mock success
-            utils.showNotification('User approved (Mock)', 'success');
         });
-        loadUsers();
+        
+        if (response.tempPassword) {
+            utils.showNotification(`Request approved! Temporary password: ${response.tempPassword}`, 'success');
+        } else {
+            utils.showNotification('Request approved', 'success');
+        }
+        
+        loadAccessRequests();
+        loadDashboard(); // Refresh stats
     } catch (error) {
-        utils.showNotification('User approved (Mock)', 'success');
-        loadUsers();
+        utils.showNotification('Failed to approve request', 'error');
+    }
+}
+
+async function denyRequest(requestId) {
+    try {
+        await utils.apiRequest(`/admin/deny-request/${requestId}`, {
+            method: 'POST'
+        });
+        utils.showNotification('Request denied', 'success');
+        loadAccessRequests();
+        loadDashboard(); // Refresh stats
+    } catch (error) {
+        utils.showNotification('Failed to deny request', 'error');
     }
 }
 
